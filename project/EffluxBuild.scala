@@ -36,6 +36,7 @@ object AkkaAmqpBuild extends Build {
     	libraryDependencies ++= Seq( 
 	      junit,
 		  sbtJunitSupport,
+		  scalaTest,
 		netty,
 	      slf4jApi,
         slf4jLog4j12,
@@ -45,6 +46,7 @@ object AkkaAmqpBuild extends Build {
 }
 
 object dependencies {
+    def scalaTest    = "org.scalatest" % "scalatest_2.10" % "2.0.M6-SNAP6" % "test"   	  // ApacheV2
     def sbtJunitSupport = "com.novocode" % "junit-interface" % "0.8" % "test->default"
 	def junit = "junit" % "junit" % "4.7" % "test"
 	def netty = "org.jboss.netty" % "netty" % "3.2.2.Final"
