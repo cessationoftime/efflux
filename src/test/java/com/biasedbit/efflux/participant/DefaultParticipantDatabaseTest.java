@@ -202,7 +202,7 @@ public class DefaultParticipantDatabaseTest {
 
     // private classes ------------------------------------------------------------------------------------------------
 
-    private static class TestListener implements ParticipantEventListener {
+    public static class TestListener implements ParticipantEventListener {
 
         // internal vars ----------------------------------------------------------------------------------------------
 
