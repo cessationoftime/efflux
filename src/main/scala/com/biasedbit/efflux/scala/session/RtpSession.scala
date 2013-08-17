@@ -1,11 +1,11 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.network.ControlPacketReceiver
-import com.biasedbit.efflux.network.DataPacketReceiver
-import com.biasedbit.efflux.packet.CompoundControlPacket
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.participant.RtpParticipant
+import com.biasedbit.efflux.scala.network.ControlPacketReceiver
+import com.biasedbit.efflux.scala.network.DataPacketReceiver
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.ControlPacket
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.participant.RtpParticipant
 import java.util.Set
 import java.util.Map
 //remove if not needed

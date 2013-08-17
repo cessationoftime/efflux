@@ -1,8 +1,8 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.CompoundControlPacket
-import com.biasedbit.efflux.packet.ControlPacket
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.ControlPacket
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.channel.ChannelEvent
 import org.jboss.netty.channel.ChannelHandlerContext
@@ -12,7 +12,6 @@ import org.jboss.netty.channel.MessageEvent
 import java.util.ArrayList
 import java.util.List
 import ControlPacketDecoder._
-//remove if not needed
 import scala.collection.JavaConversions._
 
 object ControlPacketDecoder {
@@ -44,7 +43,7 @@ class ControlPacketDecoder extends ChannelUpstreamHandler {
       try {
         controlPacketList.add(ControlPacket.decode(buffer))
       } catch {
-        case e1: Exception => LOG.debug("Exception caught while decoding RTCP packet.", e1)
+        case e1: Exception ⇒ LOG.debug("Exception caught while decoding RTCP packet.", e1)
       }
     }
     if (!controlPacketList.isEmpty) {

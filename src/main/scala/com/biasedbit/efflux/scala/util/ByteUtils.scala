@@ -20,7 +20,7 @@ object ByteUtils {
     try {
       md = MessageDigest.getInstance("MD5")
     } catch {
-      case e: NoSuchAlgorithmException => return hashString
+      case e: NoSuchAlgorithmException ⇒ return hashString
     }
     md.update(hashString.getBytes, 0, hashString.length)
     convertToHex(md.digest())
@@ -28,7 +28,7 @@ object ByteUtils {
 
   def convertToHex(data: Array[Byte]): String = {
     val buf = new StringBuffer()
-    for (aData <- data) {
+    for (aData ← data) {
       var halfbyte = (aData >>> 4) & 0x0F
       var two_halfs = 0
       do {
@@ -48,13 +48,13 @@ object ByteUtils {
       return convertToHex(array)
     }
     val builder = new StringBuilder()
-    for (b <- array) {
+    for (b ← array) {
       builder.append(" 0x")
       val hex = Integer.toHexString(b)
       hex.length match {
-        case 1 => builder.append('0').append(hex)
-        case 2 => builder.append(hex)
-        case _ => builder.append(hex.substring(6, 8))
+        case 1 ⇒ builder.append('0').append(hex)
+        case 2 ⇒ builder.append(hex)
+        case _ ⇒ builder.append(hex.substring(6, 8))
       }
     }
     builder.toString
@@ -83,7 +83,7 @@ object ByteUtils {
    */
   def writeBits(bytes: Array[Byte]): String = {
     val stringBuilder = new StringBuilder()
-    for (i <- 0 until bytes.length) {
+    for (i ← 0 until bytes.length) {
       if ((i % 4) == 0) {
         stringBuilder.append("\n")
       }

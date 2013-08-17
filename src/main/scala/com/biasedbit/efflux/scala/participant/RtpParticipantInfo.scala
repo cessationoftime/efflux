@@ -1,11 +1,11 @@
 package com.biasedbit.efflux.scala.participant
 
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkPrivItem
+import com.biasedbit.efflux.scala.packet.SdesChunk
+import com.biasedbit.efflux.scala.packet.SdesChunkItem
+import com.biasedbit.efflux.scala.packet.SdesChunkPrivItem
 import java.util.Random
 import RtpParticipantInfo._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -77,44 +77,46 @@ class RtpParticipantInfo(@BeanProperty var ssrc: Long) {
     if (chunk.getItems == null) {
       return modified
     }
-    for (item <- chunk.getItems) item.getType match {
-      case CNAME => if (this.willCauseModification(this.cname, item.getValue)) {
+    import SdesChunkItem.Type._
+    for (item ← chunk.getItems) item.getType match {
+      case CNAME ⇒ if (this.willCauseModification(this.cname, item.getValue)) {
         this.setCname(item.getValue)
         modified = true
       }
-      case NAME => if (this.willCauseModification(this.name, item.getValue)) {
+      case NAME ⇒ if (this.willCauseModification(this.name, item.getValue)) {
         this.setName(item.getValue)
         modified = true
       }
-      case EMAIL => if (this.willCauseModification(this.email, item.getValue)) {
+      case EMAIL ⇒ if (this.willCauseModification(this.email, item.getValue)) {
         this.setEmail(item.getValue)
         modified = true
       }
-      case PHONE => if (this.willCauseModification(this.phone, item.getValue)) {
+      case PHONE ⇒ if (this.willCauseModification(this.phone, item.getValue)) {
         this.setPhone(item.getValue)
         modified = true
       }
-      case LOCATION => if (this.willCauseModification(this.location, item.getValue)) {
+      case LOCATION ⇒ if (this.willCauseModification(this.location, item.getValue)) {
         this.setLocation(item.getValue)
         modified = true
       }
-      case TOOL => if (this.willCauseModification(this.tool, item.getValue)) {
+      case TOOL ⇒ if (this.willCauseModification(this.tool, item.getValue)) {
         this.setTool(item.getValue)
         modified = true
       }
-      case NOTE => if (this.willCauseModification(this.note, item.getValue)) {
+      case NOTE ⇒ if (this.willCauseModification(this.note, item.getValue)) {
         this.setNote(item.getValue)
         modified = true
       }
-      case PRIV => 
+      case PRIV ⇒
         var prefix = item.asInstanceOf[SdesChunkPrivItem].getPrefix
-        if (this.willCauseModification(this.privPrefix, prefix) || 
+        if (this.willCauseModification(this.privPrefix, prefix) ||
           this.willCauseModification(this.priv, item.getValue)) {
           this.setPriv(prefix, item.getValue)
           modified = true
         }
 
-      case _}
+      case _ ⇒
+    }
     modified
   }
 

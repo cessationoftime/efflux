@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.packet.AppDataPacket
-import com.biasedbit.efflux.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.AppDataPacket
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
 //remove if not needed
 import scala.collection.JavaConversions._
 

@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.participant.RtpParticipantInfo
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.participant.RtpParticipantInfo
 //remove if not needed
 import scala.collection.JavaConversions._
 

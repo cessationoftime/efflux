@@ -2,14 +2,12 @@ package com.biasedbit.efflux.scala.packet
 
 import org.jboss.netty.buffer.ChannelBuffer
 import ControlPacket._
-//remove if not needed
 import scala.collection.JavaConversions._
 
 object ControlPacket {
-
   def decode(buffer: ChannelBuffer): ControlPacket = {
     if ((buffer.readableBytes() % 4) > 0) {
-      throw new IllegalArgumentException("Invalid RTCP packet length: expecting multiple of 4 and got " + 
+      throw new IllegalArgumentException("Invalid RTCP packet length: expecting multiple of 4 and got " +
         buffer.readableBytes())
     }
     val b = buffer.readByte()
@@ -25,12 +23,12 @@ object ControlPacket {
       return null
     }
     `type` match {
-      case SENDER_REPORT => SenderReportPacket.decode(buffer, hasPadding, innerBlocks, length)
-      case RECEIVER_REPORT => ReceiverReportPacket.decode(buffer, hasPadding, innerBlocks, length)
-      case SOURCE_DESCRIPTION => SourceDescriptionPacket.decode(buffer, hasPadding, innerBlocks, length)
-      case BYE => ByePacket.decode(buffer, hasPadding, innerBlocks, length)
-      case APP_DATA => null
-      case _ => throw new IllegalArgumentException("Unknown RTCP packet type: " + `type`)
+      case Type.SENDER_REPORT      ⇒ SenderReportPacket.decode(buffer, hasPadding, innerBlocks, length)
+      case Type.RECEIVER_REPORT    ⇒ ReceiverReportPacket.decode(buffer, hasPadding, innerBlocks, length)
+      case Type.SOURCE_DESCRIPTION ⇒ SourceDescriptionPacket.decode(buffer, hasPadding, innerBlocks, length)
+      case Type.BYE                ⇒ ByePacket.decode(buffer, hasPadding, innerBlocks, length)
+      case Type.APP_DATA           ⇒ null
+      case _                       ⇒ throw new IllegalArgumentException("Unknown RTCP packet type: " + `type`)
     }
   }
 
@@ -46,29 +44,29 @@ object ControlPacket {
 
     val APP_DATA = new Type(0xcc.toByte)
 
-    class Type(var b: Byte) extends Val {
+    class Type(var b: Byte) extends scala.Enumeration.Val {
 
       def getByte(): Byte = this.b
     }
 
-    def fromByte(b: Byte): Type = b match {
-      case 0xc8.toByte => SENDER_REPORT
-      case 0xc9.toByte => RECEIVER_REPORT
-      case 0xca.toByte => SOURCE_DESCRIPTION
-      case 0xcb.toByte => BYE
-      case 0xcc.toByte => APP_DATA
-      case _ => throw new IllegalArgumentException("Unknown RTCP packet type: " + b)
+    def fromByte(b: Byte): Type = b.toInt match {
+      case 0xc8 ⇒ SENDER_REPORT
+      case 0xc9 ⇒ RECEIVER_REPORT
+      case 0xca ⇒ SOURCE_DESCRIPTION
+      case 0xcb ⇒ BYE
+      case 0xcc ⇒ APP_DATA
+      case _    ⇒ throw new IllegalArgumentException("Unknown RTCP packet type: " + b)
     }
 
-    implicit def convertValue(v: Value): Type = v.asInstanceOf[Type]
+    implicit def convertValue(v: scala.Enumeration.Value): Type = v.asInstanceOf[Type]
   }
 }
 
 /**
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>
  */
-abstract class ControlPacket protected (protected var `type`: Type) {
-
+abstract class ControlPacket protected (protected var `type`: ControlPacket.Type.Type) {
+  import ControlPacket.Type
   protected var version: RtpVersion = RtpVersion.V2
 
   def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer
@@ -84,5 +82,5 @@ abstract class ControlPacket protected (protected var `type`: Type) {
     this.version = version
   }
 
-  def getType(): Type = `type`
+  def getType(): ControlPacket.Type.Type = `type`
 }

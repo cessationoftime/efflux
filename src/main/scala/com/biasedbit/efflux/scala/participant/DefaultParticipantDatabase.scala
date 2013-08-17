@@ -1,10 +1,10 @@
 package com.biasedbit.efflux.scala.participant
 
 import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.util.TimeUtils
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.SdesChunk
+import com.biasedbit.efflux.scala.packet.SdesChunkItem
+import com.biasedbit.efflux.scala.util.TimeUtils
 import java.net.SocketAddress
 import java.util.ArrayList
 import java.util.Collection
@@ -14,7 +14,7 @@ import java.util.Iterator
 import java.util.Map
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import DefaultParticipantDatabase._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -31,7 +31,7 @@ object DefaultParticipantDatabase {
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>
  */
 class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: ParticipantEventListener)
-    extends ParticipantDatabase {
+  extends ParticipantDatabase {
 
   private val listener = eventListener
 
@@ -65,11 +65,11 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
   override def doWithReceivers(operation: ParticipantOperation) {
     this.lock.readLock().lock()
     try {
-      for (receiver <- this.receivers) {
+      for (receiver ← this.receivers) {
         try {
           operation.doWithParticipant(receiver)
         } catch {
-          case e: Exception => LOG.error("Failed to perform operation {} on receiver {}.", e, operation, 
+          case e: Exception ⇒ LOG.error("Failed to perform operation {} on receiver {}.", e, operation,
             receiver)
         }
       }
@@ -81,11 +81,11 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
   override def doWithParticipants(operation: ParticipantOperation) {
     this.lock.readLock().lock()
     try {
-      for (member <- this.members.values) {
+      for (member ← this.members.values) {
         try {
           operation.doWithParticipant(member)
         } catch {
-          case e: Exception => LOG.error("Failed to perform operation {} on member {}.", e, operation, 
+          case e: Exception ⇒ LOG.error("Failed to perform operation {} on member {}.", e, operation,
             member)
         }
       }
@@ -101,8 +101,8 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
     this.lock.writeLock().lock()
     try {
       var isMember = false
-      for (member <- this.members.values) {
-        val sameDestinationAddresses = member.getDataDestination == remoteParticipant.getDataDestination && 
+      for (member ← this.members.values) {
+        val sameDestinationAddresses = member.getDataDestination == remoteParticipant.getDataDestination &&
           member.getControlDestination == remoteParticipant.getControlDestination
         val sameCname = member.getInfo.getCname == remoteParticipant.getInfo.getCname
         if (sameDestinationAddresses || sameCname) {
@@ -141,7 +141,7 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
       var participant = this.members.get(packet.getSsrc)
       if (participant == null) {
         var isReceiver = false
-        for (receiver <- this.receivers if receiver.getDataDestination == origin) {
+        for (receiver ← this.receivers if receiver.getDataDestination == origin) {
           receiver.getInfo.setSsrc(packet.getSsrc)
           participant = receiver
           participant.setLastDataOrigin(origin)
@@ -170,7 +170,7 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
       var participant = this.members.get(chunk.getSsrc)
       if (participant == null) {
         var isReceiver = false
-        for (receiver <- this.receivers) {
+        for (receiver ← this.receivers) {
           var equalCname = false
           val chunkCname = chunk.getItemValue(SdesChunkItem.Type.CNAME)
           if ((chunkCname != null) && chunkCname == receiver.getInfo.getCname) {
@@ -214,9 +214,9 @@ class DefaultParticipantDatabase(@BeanProperty val id: String, eventListener: Pa
       while (iterator.hasNext) {
         val participant = iterator.next()
         val timeout = this.timeoutAfterByeAndNoPacketsReceived * 1000
-        if (participant.receivedBye() && 
+        if (participant.receivedBye() &&
           TimeUtils.hasExpired(now, participant.getLastReceptionInstant, timeout)) {
-          LOG.trace("Removed {} from session with id '{}' after reception of BYE and {}s of inactivity.", 
+          LOG.trace("Removed {} from session with id '{}' after reception of BYE and {}s of inactivity.",
             participant, this.id, this.timeoutAfterByeAndNoPacketsReceived)
           iterator.remove()
           if (participant.isReceiver) {

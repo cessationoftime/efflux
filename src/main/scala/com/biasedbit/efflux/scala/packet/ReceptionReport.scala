@@ -3,7 +3,7 @@ package com.biasedbit.efflux.scala.packet
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import ReceptionReport._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -84,7 +84,7 @@ class ReceptionReport {
   }
 
   def setExtendedHighestSequenceNumberReceived(extendedHighestSequenceNumberReceived: Long) {
-    if ((extendedHighestSequenceNumberReceived < 0) || 
+    if ((extendedHighestSequenceNumberReceived < 0) ||
       (extendedHighestSequenceNumberReceived > 0xffffffffL)) {
       throw new IllegalArgumentException("Valid range for Extended Highest SeqNumber Received is [0;0xffffffff]")
     }

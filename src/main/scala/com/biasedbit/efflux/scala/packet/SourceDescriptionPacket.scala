@@ -11,13 +11,13 @@ import scala.collection.JavaConversions._
 
 object SourceDescriptionPacket {
 
-  def decode(buffer: ChannelBuffer, 
-      hasPadding: Boolean, 
-      innerBlocks: Byte, 
-      length: Int): SourceDescriptionPacket = {
+  def decode(buffer: ChannelBuffer,
+             hasPadding: Boolean,
+             innerBlocks: Byte,
+             length: Int): SourceDescriptionPacket = {
     val packet = new SourceDescriptionPacket()
     val readable = buffer.readableBytes()
-    for (i <- 0 until innerBlocks) {
+    for (i ← 0 until innerBlocks) {
       packet.addItem(SdesChunk.decode(buffer))
     }
     if (hasPadding) {
@@ -39,7 +39,7 @@ object SourceDescriptionPacket {
     var encodedChunks: List[ChannelBuffer] = null
     if (packet.chunks != null) {
       encodedChunks = new ArrayList[ChannelBuffer](packet.chunks.size)
-      for (chunk <- packet.chunks) {
+      for (chunk ← packet.chunks) {
         val encodedChunk = chunk.encode()
         encodedChunks.add(encodedChunk)
         size += encodedChunk.readableBytes()
@@ -66,12 +66,12 @@ object SourceDescriptionPacket {
     val sizeInOctets = (size / 4) - 1
     buffer.writeShort(sizeInOctets)
     if (encodedChunks != null) {
-      for (encodedChunk <- encodedChunks) {
+      for (encodedChunk ← encodedChunks) {
         buffer.writeBytes(encodedChunk)
       }
     }
     if (padding > 0) {
-      for (i <- 0 until (padding - 1)) {
+      for (i ← 0 until (padding - 1)) {
         buffer.writeByte(0x00)
       }
       buffer.writeByte(padding)
@@ -83,15 +83,15 @@ object SourceDescriptionPacket {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class SourceDescriptionPacket extends ControlPacket {
+class SourceDescriptionPacket extends ControlPacket(ControlPacket.Type.SOURCE_DESCRIPTION) {
 
   private var chunks: List[SdesChunk] = _
 
   override def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer = {
-    encode(currentCompoundLength, fixedBlockSize, this)
+    SourceDescriptionPacket.encode(currentCompoundLength, fixedBlockSize, this)
   }
 
-  override def encode(): ChannelBuffer = encode(0, 0, this)
+  override def encode(): ChannelBuffer = SourceDescriptionPacket.encode(0, 0, this)
 
   def addItem(chunk: SdesChunk): Boolean = {
     if (this.chunks == null) {

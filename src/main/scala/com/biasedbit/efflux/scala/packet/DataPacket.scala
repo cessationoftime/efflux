@@ -5,8 +5,7 @@ import org.jboss.netty.buffer.ChannelBuffers
 import java.util.ArrayList
 import java.util.List
 import DataPacket._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
-//remove if not needed
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 import scala.collection.JavaConversions._
 
 object DataPacket {
@@ -38,7 +37,7 @@ object DataPacket {
     }
     if (contributingSourcesCount > 0) {
       packet.contributingSourceIds = new ArrayList[Long](contributingSourcesCount)
-      for (i <- 0 until contributingSourcesCount) {
+      for (i ← 0 until contributingSourcesCount) {
         val contributingSource = buffer.readUnsignedInt()
         packet.contributingSourceIds.add(contributingSource)
       }
@@ -96,7 +95,7 @@ object DataPacket {
       buffer.writeBytes(packet.extensionData)
     }
     if (packet.getContributingSourcesCount > 0) {
-      for (contributingSourceId <- packet.getContributingSourceIds) {
+      for (contributingSourceId ← packet.getContributingSourceIds) {
         buffer.writeInt(contributingSourceId.intValue())
       }
     }
@@ -104,7 +103,7 @@ object DataPacket {
       buffer.writeBytes(packet.data.array())
     }
     if (padding > 0) {
-      for (i <- 0 until (padding - 1)) {
+      for (i ← 0 until (padding - 1)) {
         buffer.writeByte(0x00)
       }
       buffer.writeByte(padding)
@@ -168,9 +167,9 @@ class DataPacket {
   @BeanProperty
   var data: ChannelBuffer = _
 
-  def encode(fixedBlockSize: Int): ChannelBuffer = encode(fixedBlockSize, this)
+  def encode(fixedBlockSize: Int): ChannelBuffer = DataPacket.encode(fixedBlockSize, this)
 
-  def encode(): ChannelBuffer = encode(0, this)
+  def encode(): ChannelBuffer = DataPacket.encode(0, this)
 
   def addContributingSourceId(contributingSourceId: Long) {
     if (this.contributingSourceIds == null) {

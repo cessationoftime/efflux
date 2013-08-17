@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.DataPacket
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.DataPacket
 import org.jboss.netty.channel.ChannelHandlerContext
 import org.jboss.netty.channel.ExceptionEvent
 import org.jboss.netty.channel.MessageEvent

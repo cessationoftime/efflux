@@ -15,11 +15,11 @@ object AppDataPacket {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class AppDataPacket(`type`: Type) extends ControlPacket(`type`) {
+class AppDataPacket(`type`: ControlPacket.Type.Type) extends ControlPacket(`type`) {
 
   override def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer = {
-    encode(currentCompoundLength, fixedBlockSize, this)
+    AppDataPacket.encode(currentCompoundLength, fixedBlockSize, this)
   }
 
-  override def encode(): ChannelBuffer = encode(0, 0, this)
+  override def encode(): ChannelBuffer = AppDataPacket.encode(0, 0, this)
 }

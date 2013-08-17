@@ -1,15 +1,15 @@
 package com.biasedbit.efflux.scala.participant
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.packet.SdesChunk
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.SdesChunk
 import java.net.SocketAddress
 import java.util.Arrays
 import java.util.Collection
 import java.util.HashMap
 import java.util.Map
 import SingleParticipantDatabase._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -25,7 +25,7 @@ class SingleParticipantDatabase(@BeanProperty var id: String) extends Participan
 
   private var participant: RtpParticipant = _
 
-  override def getReceivers(): Collection[RtpParticipant] = Arrays.asList(this.participant:_*)
+  override def getReceivers(): Collection[RtpParticipant] = Arrays.asList(this.participant: _*)
 
   override def getMembers(): Map[Long, RtpParticipant] = {
     val map = new HashMap[Long, RtpParticipant](1)
@@ -37,7 +37,7 @@ class SingleParticipantDatabase(@BeanProperty var id: String) extends Participan
     try {
       operation.doWithParticipant(this.participant)
     } catch {
-      case e: Exception => LOG.error("Failed to perform operation {} on remote participant {}.", e, operation, 
+      case e: Exception ⇒ LOG.error("Failed to perform operation {} on remote participant {}.", e, operation,
         this.participant)
     }
   }
@@ -46,7 +46,7 @@ class SingleParticipantDatabase(@BeanProperty var id: String) extends Participan
     try {
       operation.doWithParticipant(this.participant)
     } catch {
-      case e: Exception => LOG.error("Failed to perform operation {} on remote participant {}.", e, operation, 
+      case e: Exception ⇒ LOG.error("Failed to perform operation {} on remote participant {}.", e, operation,
         this.participant)
     }
   }

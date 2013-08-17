@@ -3,16 +3,16 @@ package com.biasedbit.efflux.scala.packet
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import SenderReportPacket._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
 object SenderReportPacket {
 
-  def decode(buffer: ChannelBuffer, 
-      hasPadding: Boolean, 
-      innerBlocks: Byte, 
-      length: Int): SenderReportPacket = {
+  def decode(buffer: ChannelBuffer,
+             hasPadding: Boolean,
+             innerBlocks: Byte,
+             length: Int): SenderReportPacket = {
     val packet = new SenderReportPacket()
     packet.setSenderSsrc(buffer.readUnsignedInt())
     packet.setNtpTimestamp(buffer.readLong())
@@ -20,7 +20,7 @@ object SenderReportPacket {
     packet.setSenderPacketCount(buffer.readUnsignedInt())
     packet.setSenderOctetCount(buffer.readUnsignedInt())
     var read = 24
-    for (i <- 0 until innerBlocks) {
+    for (i ← 0 until innerBlocks) {
       packet.addReceptionReportBlock(ReceptionReport.decode(buffer))
       read += 24
     }
@@ -67,12 +67,12 @@ object SenderReportPacket {
     buffer.writeInt(packet.senderPacketCount.toInt)
     buffer.writeInt(packet.senderOctetCount.toInt)
     if (packet.getReceptionReportCount > 0) {
-      for (block <- packet.receptionReports) {
+      for (block ← packet.receptionReports) {
         buffer.writeBytes(block.encode())
       }
     }
     if (padding > 0) {
-      for (i <- 0 until (padding - 1)) {
+      for (i ← 0 until (padding - 1)) {
         buffer.writeByte(0x00)
       }
       buffer.writeByte(padding)
@@ -84,25 +84,24 @@ object SenderReportPacket {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class SenderReportPacket extends AbstractReportPacket {
+class SenderReportPacket extends AbstractReportPacket(ControlPacket.Type.SENDER_REPORT) {
 
   @BeanProperty
   var ntpTimestamp: Long = _
 
-  @BeanProperty
-  var rtpTimestamp: Long = _
+  protected var rtpTimestamp: Long = _
 
-  @BeanProperty
-  var senderPacketCount: Long = _
+  protected var senderPacketCount: Long = _
 
-  @BeanProperty
-  var senderOctetCount: Long = _
+  protected var senderOctetCount: Long = _
 
   override def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer = {
-    encode(currentCompoundLength, fixedBlockSize, this)
+    SenderReportPacket.encode(currentCompoundLength, fixedBlockSize, this)
   }
 
-  override def encode(): ChannelBuffer = encode(0, 0, this)
+  override def encode(): ChannelBuffer = SenderReportPacket.encode(0, 0, this)
+
+  def getRtpTimestamp = rtpTimestamp
 
   def setRtpTimestamp(rtpTimestamp: Long) {
     if ((rtpTimestamp < 0) || (rtpTimestamp > 0xffffffffL)) {
@@ -111,12 +110,16 @@ class SenderReportPacket extends AbstractReportPacket {
     this.rtpTimestamp = rtpTimestamp
   }
 
+  def getSenderPacketCount = senderPacketCount
+
   def setSenderPacketCount(senderPacketCount: Long) {
     if ((senderPacketCount < 0) || (senderPacketCount > 0xffffffffL)) {
       throw new IllegalArgumentException("Valid range for Sender Packet Count is [0;0xffffffff]")
     }
     this.senderPacketCount = senderPacketCount
   }
+
+  def getSenderOctetCount = senderOctetCount
 
   def setSenderOctetCount(senderOctetCount: Long) {
     if ((senderOctetCount < 0) || (senderOctetCount > 0xffffffffL)) {

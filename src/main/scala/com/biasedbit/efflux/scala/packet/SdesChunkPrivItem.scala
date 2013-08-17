@@ -3,7 +3,7 @@ package com.biasedbit.efflux.scala.packet
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.util.CharsetUtil
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -11,7 +11,7 @@ import scala.collection.JavaConversions._
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
 class SdesChunkPrivItem protected (@BeanProperty val prefix: String, value: String)
-    extends SdesChunkItem(SdesChunkItem.Type.PRIV, value) {
+  extends SdesChunkItem(SdesChunkItem.Type.PRIV, value) {
 
   override def encode(): ChannelBuffer = {
     var prefixBytes: Array[Byte] = null
@@ -19,7 +19,7 @@ class SdesChunkPrivItem protected (@BeanProperty val prefix: String, value: Stri
     var valueBytes: Array[Byte] = null
     valueBytes = if (this.value != null) this.value.getBytes(CharsetUtil.UTF_8) else Array()
     if ((prefixBytes.length + valueBytes.length) > 254) {
-      throw new IllegalArgumentException("Content (prefix + text) can be no longer than 255 bytes and this has " + 
+      throw new IllegalArgumentException("Content (prefix + text) can be no longer than 255 bytes and this has " +
         valueBytes.length)
     }
     val buffer = ChannelBuffers.buffer(2 + 1 + prefixBytes.length + valueBytes.length)

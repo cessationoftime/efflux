@@ -35,16 +35,16 @@ object SdesChunkItem {
     }
 
     def fromByte(b: Byte): Type = b match {
-      case 0 => NULL
-      case 1 => CNAME
-      case 2 => NAME
-      case 3 => EMAIL
-      case 4 => PHONE
-      case 5 => LOCATION
-      case 6 => TOOL
-      case 7 => NOTE
-      case 8 => PRIV
-      case _ => throw new IllegalArgumentException("Unknown SSRC Chunk Item type: " + b)
+      case 0 ⇒ NULL
+      case 1 ⇒ CNAME
+      case 2 ⇒ NAME
+      case 3 ⇒ EMAIL
+      case 4 ⇒ PHONE
+      case 5 ⇒ LOCATION
+      case 6 ⇒ TOOL
+      case 7 ⇒ NOTE
+      case 8 ⇒ PRIV
+      case _ ⇒ throw new IllegalArgumentException("Unknown SSRC Chunk Item type: " + b)
     }
 
     implicit def convertValue(v: Value): Type = v.asInstanceOf[Type]
@@ -54,8 +54,7 @@ object SdesChunkItem {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class SdesChunkItem protected (protected val `type`: Type, protected val value: String)
-    {
+class SdesChunkItem protected[packet] (protected val `type`: SdesChunkItem.Type.Type, protected val value: String) {
 
   def encode(): ChannelBuffer = {
     if (this.`type` == Type.NULL) {
@@ -66,7 +65,7 @@ class SdesChunkItem protected (protected val `type`: Type, protected val value: 
     var valueBytes: Array[Byte] = null
     valueBytes = if (this.value != null) this.value.getBytes(CharsetUtil.UTF_8) else Array()
     if (valueBytes.length > 255) {
-      throw new IllegalArgumentException("Content (text) can be no longer than 255 bytes and this has " + 
+      throw new IllegalArgumentException("Content (text) can be no longer than 255 bytes and this has " +
         valueBytes.length)
     }
     val buffer = ChannelBuffers.buffer(2 + valueBytes.length)
@@ -76,7 +75,7 @@ class SdesChunkItem protected (protected val `type`: Type, protected val value: 
     buffer
   }
 
-  def getType(): Type = `type`
+  def getType(): SdesChunkItem.Type.Type = `type`
 
   def getValue(): String = value
 

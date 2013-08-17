@@ -1,9 +1,8 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.packet.CompoundControlPacket
 import java.net.SocketAddress
-//remove if not needed
 import scala.collection.JavaConversions._
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
 
 /**
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>

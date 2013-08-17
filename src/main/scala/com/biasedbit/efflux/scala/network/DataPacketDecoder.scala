@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.DataPacket
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.DataPacket
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.channel.Channel
 import org.jboss.netty.channel.ChannelHandlerContext
@@ -27,7 +27,7 @@ class DataPacketDecoder extends OneToOneDecoder {
     try {
       DataPacket.decode(msg.asInstanceOf[ChannelBuffer])
     } catch {
-      case e: Exception => {
+      case e: Exception ⇒ {
         LOG.debug("Failed to decode RTP packet.", e)
         null
       }

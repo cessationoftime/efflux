@@ -1,15 +1,15 @@
 package com.biasedbit.efflux.scala.participant
 
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.util.TimeUtils
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.SdesChunk
+import com.biasedbit.efflux.scala.util.TimeUtils
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.util.Collection
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import RtpParticipant._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -30,10 +30,10 @@ object RtpParticipant {
     participant
   }
 
-  def createReceiver(info: RtpParticipantInfo, 
-      host: String, 
-      dataPort: Int, 
-      controlPort: Int): RtpParticipant = {
+  def createReceiver(info: RtpParticipantInfo,
+                     host: String,
+                     dataPort: Int,
+                     controlPort: Int): RtpParticipant = {
     val participant = new RtpParticipant(info)
     if ((dataPort < 0) || (dataPort > 65536)) {
       throw new IllegalArgumentException("Invalid port number; use range [0;65536]")
@@ -158,7 +158,7 @@ class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
       return false
     }
     val that = o.asInstanceOf[RtpParticipant]
-    this.controlDestination == that.controlDestination && this.dataDestination == that.dataDestination && 
+    this.controlDestination == that.controlDestination && this.dataDestination == that.dataDestination &&
       this.info.getCname == that.info.getCname
   }
 

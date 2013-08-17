@@ -8,8 +8,8 @@ import org.jboss.netty.channel.MessageEvent
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler
 import java.util.concurrent.atomic.AtomicInteger
 import ControlHandler._
-//remove if not needed
 import scala.collection.JavaConversions._
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
 
 object ControlHandler {
 

@@ -7,19 +7,19 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.List
 import ByePacket._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
 object ByePacket {
 
-  def decode(buffer: ChannelBuffer, 
-      hasPadding: Boolean, 
-      innerBlocks: Byte, 
-      length: Int): ByePacket = {
+  def decode(buffer: ChannelBuffer,
+             hasPadding: Boolean,
+             innerBlocks: Byte,
+             length: Int): ByePacket = {
     val packet = new ByePacket()
     var read = 0
-    for (i <- 0 until innerBlocks) {
+    for (i ← 0 until innerBlocks) {
       packet.addSsrc(buffer.readUnsignedInt())
       read += 4
     }
@@ -53,7 +53,7 @@ object ByePacket {
     if (packet.reasonForLeaving != null) {
       reasonForLeavingBytes = packet.reasonForLeaving.getBytes(CharsetUtil.UTF_8)
       if (reasonForLeavingBytes.length > 255) {
-        throw new IllegalArgumentException("Reason for leaving cannot exceed 255 bytes and this has " + 
+        throw new IllegalArgumentException("Reason for leaving cannot exceed 255 bytes and this has " +
           reasonForLeavingBytes.length)
       }
       size += (1 + reasonForLeavingBytes.length)
@@ -86,19 +86,19 @@ object ByePacket {
     val sizeInOctets = (size / 4) - 1
     buffer.writeShort(sizeInOctets)
     if (packet.ssrcList != null) {
-      for (ssrc <- packet.ssrcList) {
+      for (ssrc ← packet.ssrcList) {
         buffer.writeInt(ssrc.intValue())
       }
     }
     if (reasonForLeavingBytes != null) {
       buffer.writeByte(reasonForLeavingBytes.length)
       buffer.writeBytes(reasonForLeavingBytes)
-      for (i <- 0 until reasonForLeavingPadding) {
+      for (i ← 0 until reasonForLeavingPadding) {
         buffer.writeByte(0x00)
       }
     }
     if (padding > 0) {
-      for (i <- 0 until (padding - 1)) {
+      for (i ← 0 until (padding - 1)) {
         buffer.writeByte(0x00)
       }
       buffer.writeByte(padding)
@@ -110,7 +110,7 @@ object ByePacket {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class ByePacket extends ControlPacket {
+class ByePacket extends ControlPacket(ControlPacket.Type.BYE) {
 
   private var ssrcList: List[Long] = _
 
@@ -118,10 +118,10 @@ class ByePacket extends ControlPacket {
   var reasonForLeaving: String = _
 
   override def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer = {
-    encode(currentCompoundLength, fixedBlockSize, this)
+    ByePacket.encode(currentCompoundLength, fixedBlockSize, this)
   }
 
-  override def encode(): ChannelBuffer = encode(0, 0, this)
+  override def encode(): ChannelBuffer = ByePacket.encode(0, 0, this)
 
   def addSsrc(ssrc: Long): Boolean = {
     if ((ssrc < 0) || (ssrc > 0xffffffffL)) {
@@ -139,7 +139,7 @@ class ByePacket extends ControlPacket {
 
   def setSsrcList(ssrcList: List[Long]) {
     this.ssrcList = new ArrayList[Long](ssrcList.size)
-    for (ssrc <- ssrcList) {
+    for (ssrc ← ssrcList) {
       this.addSsrc(ssrc)
     }
   }

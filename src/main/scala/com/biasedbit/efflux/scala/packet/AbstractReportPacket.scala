@@ -9,7 +9,7 @@ import scala.collection.JavaConversions._
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-abstract class AbstractReportPacket protected (`type`: Type) extends ControlPacket(`type`) {
+abstract class AbstractReportPacket protected (`type`: ControlPacket.Type.Type) extends ControlPacket(`type`) {
 
   protected var senderSsrc: Long = _
 

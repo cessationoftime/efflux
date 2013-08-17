@@ -1,28 +1,28 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.network.ControlHandler
-import com.biasedbit.efflux.network.ControlPacketDecoder
-import com.biasedbit.efflux.network.ControlPacketEncoder
-import com.biasedbit.efflux.network.DataHandler
-import com.biasedbit.efflux.network.DataPacketDecoder
-import com.biasedbit.efflux.network.DataPacketEncoder
-import com.biasedbit.efflux.packet.AbstractReportPacket
-import com.biasedbit.efflux.packet.AppDataPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.CompoundControlPacket
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.SourceDescriptionPacket
-import com.biasedbit.efflux.participant.ParticipantDatabase
-import com.biasedbit.efflux.participant.ParticipantOperation
-import com.biasedbit.efflux.participant.RtpParticipant
-import com.biasedbit.efflux.participant.RtpParticipantInfo
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.network.ControlHandler
+import com.biasedbit.efflux.scala.network.ControlPacketDecoder
+import com.biasedbit.efflux.scala.network.ControlPacketEncoder
+import com.biasedbit.efflux.scala.network.DataHandler
+import com.biasedbit.efflux.scala.network.DataPacketDecoder
+import com.biasedbit.efflux.scala.network.DataPacketEncoder
+import com.biasedbit.efflux.scala.packet.AbstractReportPacket
+import com.biasedbit.efflux.scala.packet.AppDataPacket
+import com.biasedbit.efflux.scala.packet.ByePacket
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.ControlPacket
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.ReceiverReportPacket
+import com.biasedbit.efflux.scala.packet.ReceptionReport
+import com.biasedbit.efflux.scala.packet.SdesChunk
+import com.biasedbit.efflux.scala.packet.SdesChunkItems
+import com.biasedbit.efflux.scala.packet.SenderReportPacket
+import com.biasedbit.efflux.scala.packet.SourceDescriptionPacket
+import com.biasedbit.efflux.scala.participant.ParticipantDatabase
+import com.biasedbit.efflux.scala.participant.ParticipantOperation
+import com.biasedbit.efflux.scala.participant.RtpParticipant
+import com.biasedbit.efflux.scala.participant.RtpParticipantInfo
 import org.jboss.netty.bootstrap.ConnectionlessBootstrap
 import org.jboss.netty.channel.ChannelPipeline
 import org.jboss.netty.channel.ChannelPipelineFactory
@@ -82,15 +82,13 @@ object AbstractRtpSession {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-abstract class AbstractRtpSession(protected val id: String, 
-    payloadTypes: Collection[Integer], 
-    local: RtpParticipant, 
-    timer: HashedWheelTimer, 
-    protected val executor: OrderedMemoryAwareThreadPoolExecutor) extends RtpSession with TimerTask {
+abstract class AbstractRtpSession(protected val id: String,
+                                  payloadTypes: Collection[Integer],
+                                  local: RtpParticipant,
+                                  _timer: HashedWheelTimer,
+                                  protected val executor: OrderedMemoryAwareThreadPoolExecutor) extends RtpSession with TimerTask {
 
   protected val payloadTypes = new HashSet[Integer]()
-
-  protected val timer: HashedWheelTimer = _
 
   protected var host: String = _
 
@@ -144,9 +142,7 @@ abstract class AbstractRtpSession(protected val id: String,
 
   protected var periodicRtcpSendInterval: Int = _
 
-  protected val internalTimer: Boolean = _
-
-  for (payloadType <- payloadTypes if (payloadType < 0) || (payloadType > 127)) {
+  for (payloadType ← payloadTypes if (payloadType < 0) || (payloadType > 127)) {
     throw new IllegalArgumentException("PayloadTypes must be in range [0;127]")
   }
 
@@ -156,39 +152,26 @@ abstract class AbstractRtpSession(protected val id: String,
 
   this.payloadTypes.addAll(payloadTypes)
 
-  if (timer == null) {
-    this.timer = new HashedWheelTimer(1, TimeUnit.SECONDS)
-    this.internalTimer = true
-  } else {
-    this.timer = timer
-    this.internalTimer = false
-  }
+  protected val (timer: HashedWheelTimer, internalTimer: Boolean) =
+    if (_timer == null) (new HashedWheelTimer(1, TimeUnit.SECONDS), true) else (_timer, false)
 
-  def this(id: String, payloadType: Int, local: RtpParticipant) {
-    this(id, payloadType, local, null, null)
-  }
+  def this(id: String,
+           payloadType: Int,
+           local: RtpParticipant,
+           timer: HashedWheelTimer,
+           executor: OrderedMemoryAwareThreadPoolExecutor) = this(id, Collections.singleton(payloadType), local, timer, executor)
 
-  def this(id: String, 
-      payloadType: Int, 
-      local: RtpParticipant, 
-      timer: HashedWheelTimer) {
-    this(id, payloadType, local, timer, null)
-  }
+  def this(id: String, payloadType: Int, local: RtpParticipant) = this(id, payloadType, local, null, null)
 
-  def this(id: String, 
-      payloadType: Int, 
-      local: RtpParticipant, 
-      executor: OrderedMemoryAwareThreadPoolExecutor) {
-    this(id, payloadType, local, null, executor)
-  }
+  def this(id: String,
+           payloadType: Int,
+           local: RtpParticipant,
+           timer: HashedWheelTimer) = this(id, payloadType, local, timer, null)
 
-  def this(id: String, 
-      payloadType: Int, 
-      local: RtpParticipant, 
-      timer: HashedWheelTimer, 
-      executor: OrderedMemoryAwareThreadPoolExecutor) {
-    this(id, Collections.singleton(payloadType), local, timer, executor)
-  }
+  def this(id: String,
+           payloadType: Int,
+           local: RtpParticipant,
+           executor: OrderedMemoryAwareThreadPoolExecutor) = this(id, payloadType, local, null, executor)
 
   override def getId(): String = id
 
@@ -240,7 +223,7 @@ abstract class AbstractRtpSession(protected val id: String,
       try {
         this.dataChannel = this.dataBootstrap.bind(dataAddress).asInstanceOf[DatagramChannel]
       } catch {
-        case e: Exception => {
+        case e: Exception ⇒ {
           LOG.error("Failed to bind data channel for session with id " + this.id, e)
           this.dataBootstrap.releaseExternalResources()
           this.controlBootstrap.releaseExternalResources()
@@ -250,8 +233,8 @@ abstract class AbstractRtpSession(protected val id: String,
       try {
         this.controlChannel = this.controlBootstrap.bind(controlAddress).asInstanceOf[DatagramChannel]
       } catch {
-        case e: Exception => {
-          LOG.error("Failed to bind control channel for session with id " + 
+        case e: Exception ⇒ {
+          LOG.error("Failed to bind control channel for session with id " +
             this.id, e)
           this.dataChannel.close()
           this.dataBootstrap.releaseExternalResources()
@@ -332,7 +315,7 @@ abstract class AbstractRtpSession(protected val id: String,
   override def getLocalParticipant(): RtpParticipant = this.localParticipant
 
   override def addReceiver(remoteParticipant: RtpParticipant): Boolean = {
-    (remoteParticipant.getSsrc != this.localParticipant.getSsrc) && 
+    (remoteParticipant.getSsrc != this.localParticipant.getSsrc) &&
       this.participantDatabase.addReceiver(remoteParticipant)
   }
 
@@ -391,9 +374,9 @@ abstract class AbstractRtpSession(protected val id: String,
         this.leaveSession(oldSsrc, "SSRC collision detected; rejoining with new SSRC.")
         this.joinSession(newSsrc)
       }
-      LOG.warn("SSRC collision with remote end detected on session with id {}; updating SSRC from {} to {}.", 
+      LOG.warn("SSRC collision with remote end detected on session with id {}; updating SSRC from {} to {}.",
         this.id, oldSsrc, newSsrc)
-      for (listener <- this.eventListeners) {
+      for (listener ← this.eventListeners) {
         listener.resolvedSsrcConflict(this, oldSsrc, newSsrc)
       }
     }
@@ -401,15 +384,15 @@ abstract class AbstractRtpSession(protected val id: String,
     if (participant == null) {
       return
     }
-    if ((participant.getLastSequenceNumber >= packet.getSequenceNumber) && 
+    if ((participant.getLastSequenceNumber >= packet.getSequenceNumber) &&
       this.discardOutOfOrder) {
-      LOG.trace("Discarded out of order packet from {} in session with id {} (last SN was {}, packet SN was {}).", 
+      LOG.trace("Discarded out of order packet from {} in session with id {} (last SN was {}, packet SN was {}).",
         participant, this.id, participant.getLastSequenceNumber, packet.getSequenceNumber)
       return
     }
     participant.setLastSequenceNumber(packet.getSequenceNumber)
     participant.setLastDataOrigin(origin)
-    for (listener <- this.dataListeners) {
+    for (listener ← this.dataListeners) {
       listener.dataPacketReceived(this, participant.getInfo, packet)
     }
   }
@@ -419,19 +402,20 @@ abstract class AbstractRtpSession(protected val id: String,
       return
     }
     if (!this.automatedRtcpHandling) {
-      for (listener <- this.controlListeners) {
+      for (listener ← this.controlListeners) {
         listener.controlPacketReceived(this, packet)
       }
       return
     }
-    for (controlPacket <- packet.getControlPackets) controlPacket.getType match {
-      case SENDER_REPORT | RECEIVER_REPORT => this.handleReportPacket(origin, controlPacket.asInstanceOf[AbstractReportPacket])
-      case SOURCE_DESCRIPTION => this.handleSdesPacket(origin, controlPacket.asInstanceOf[SourceDescriptionPacket])
-      case BYE => this.handleByePacket(origin, controlPacket.asInstanceOf[ByePacket])
-      case APP_DATA => for (listener <- this.controlListeners) {
+    for (controlPacket ← packet.getControlPackets) controlPacket.getType match {
+      case SENDER_REPORT | RECEIVER_REPORT ⇒ this.handleReportPacket(origin, controlPacket.asInstanceOf[AbstractReportPacket])
+      case SOURCE_DESCRIPTION              ⇒ this.handleSdesPacket(origin, controlPacket.asInstanceOf[SourceDescriptionPacket])
+      case BYE                             ⇒ this.handleByePacket(origin, controlPacket.asInstanceOf[ByePacket])
+      case APP_DATA ⇒ for (listener ← this.controlListeners) {
         listener.appDataReceived(this, controlPacket.asInstanceOf[AppDataPacket])
       }
-      case _}
+      case _ ⇒
+    }
   }
 
   override def run(timeout: Timeout) {
@@ -461,7 +445,7 @@ abstract class AbstractRtpSession(protected val id: String,
     if (context == null) {
       return
     }
-    for (receptionReport <- abstractReportPacket.getReceptionReports if receptionReport.getSsrc == this.localParticipant.getSsrc) {
+    for (receptionReport ← abstractReportPacket.getReceptionReports if receptionReport.getSsrc == this.localParticipant.getSsrc) {
     }
     if (abstractReportPacket.getType == ControlPacket.Type.SENDER_REPORT) {
       val senderReport = abstractReportPacket.asInstanceOf[SenderReportPacket]
@@ -469,7 +453,7 @@ abstract class AbstractRtpSession(protected val id: String,
   }
 
   protected def handleSdesPacket(origin: SocketAddress, packet: SourceDescriptionPacket) {
-    for (chunk <- packet.getChunks) {
+    for (chunk ← packet.getChunks) {
       val participant = this.participantDatabase.getOrCreateParticipantFromSdesChunk(origin, chunk)
       if (participant == null) {
         return
@@ -477,7 +461,7 @@ abstract class AbstractRtpSession(protected val id: String,
       if (!participant.hasReceivedSdes() || this.tryToUpdateOnEverySdes) {
         participant.receivedSdes()
         if (participant.getInfo.updateFromSdesChunk(chunk)) {
-          for (listener <- this.eventListeners) {
+          for (listener ← this.eventListeners) {
             listener.participantDataUpdated(this, participant)
           }
         }
@@ -486,16 +470,16 @@ abstract class AbstractRtpSession(protected val id: String,
   }
 
   protected def handleByePacket(origin: SocketAddress, packet: ByePacket) {
-    for (ssrc <- packet.getSsrcList) {
+    for (ssrc ← packet.getSsrcList) {
       val participant = this.participantDatabase.getParticipant(ssrc)
       if (participant != null) {
         participant.byeReceived()
-        for (listener <- eventListeners) {
+        for (listener ← eventListeners) {
           listener.participantLeft(this, participant)
         }
       }
     }
-    LOG.trace("Received BYE for participants with SSRCs {} in session with id '{}' (reason: '{}').", 
+    LOG.trace("Received BYE for participants with SSRCs {} in session with id '{}' (reason: '{}').",
       packet.getSsrcList, this.id, packet.getReasonForLeaving)
   }
 
@@ -511,7 +495,7 @@ abstract class AbstractRtpSession(protected val id: String,
         try {
           writeToData(packet, participant.getDataDestination)
         } catch {
-          case e: Exception => LOG.error("Failed to send RTP packet to participants in session with id {}.", 
+          case e: Exception ⇒ LOG.error("Failed to send RTP packet to participants in session with id {}.",
             id)
         }
       }
@@ -529,7 +513,7 @@ abstract class AbstractRtpSession(protected val id: String,
     try {
       this.writeToControl(packet, participant.getControlDestination)
     } catch {
-      case e: Exception => LOG.error("Failed to send RTCP packet to {} in session with id {}.", participant, 
+      case e: Exception ⇒ LOG.error("Failed to send RTCP packet to {} in session with id {}.", participant,
         this.id)
     }
   }
@@ -541,7 +525,7 @@ abstract class AbstractRtpSession(protected val id: String,
     try {
       this.writeToControl(packet, participant.getControlDestination)
     } catch {
-      case e: Exception => LOG.error("Failed to send RTCP compound packet to {} in session with id {}.", 
+      case e: Exception ⇒ LOG.error("Failed to send RTCP compound packet to {} in session with id {}.",
         participant, this.id)
     }
   }
@@ -556,7 +540,7 @@ abstract class AbstractRtpSession(protected val id: String,
         try {
           writeToControl(packet, participant.getControlDestination)
         } catch {
-          case e: Exception => LOG.error("Failed to send RTCP packet to participants in session with id {}.", 
+          case e: Exception ⇒ LOG.error("Failed to send RTCP packet to participants in session with id {}.",
             id)
         }
       }
@@ -577,13 +561,13 @@ abstract class AbstractRtpSession(protected val id: String,
         try {
           writeToControl(packet, participant.getControlDestination)
         } catch {
-          case e: Exception => LOG.error("Failed to send RTCP compound packet to participants in session with id {}.", 
+          case e: Exception ⇒ LOG.error("Failed to send RTCP compound packet to participants in session with id {}.",
             id)
         }
       }
 
       override def toString(): String = {
-        "internalSendControl(CompoundControlPacket) for session with id " + 
+        "internalSendControl(CompoundControlPacket) for session with id " +
           id
       }
     })
@@ -699,7 +683,7 @@ abstract class AbstractRtpSession(protected val id: String,
       this.dataBootstrap.releaseExternalResources()
       this.controlBootstrap.releaseExternalResources()
       LOG.debug("RtpSession with id {} terminated.", this.id)
-      for (listener <- this.eventListeners) {
+      for (listener ← this.eventListeners) {
         listener.sessionTerminated(this, cause)
       }
       this.eventListeners.clear()

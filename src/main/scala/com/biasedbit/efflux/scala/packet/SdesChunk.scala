@@ -6,7 +6,7 @@ import java.util.ArrayList
 import java.util.Collections
 import java.util.List
 import SdesChunk._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -44,7 +44,7 @@ object SdesChunk {
     } else {
       var size = 4
       val encodedChunkItems = new ArrayList[ChannelBuffer](chunk.items.size)
-      for (item <- chunk.items) {
+      for (item ← chunk.items) {
         val encodedChunk = item.encode()
         encodedChunkItems.add(encodedChunk)
         size += encodedChunk.readableBytes()
@@ -57,11 +57,11 @@ object SdesChunk {
       size += padding
       buffer = ChannelBuffers.buffer(size)
       buffer.writeInt(chunk.ssrc.toInt)
-      for (encodedChunk <- encodedChunkItems) {
+      for (encodedChunk ← encodedChunkItems) {
         buffer.writeBytes(encodedChunk)
       }
       buffer.writeByte(0x00)
-      for (i <- 0 until padding) {
+      for (i ← 0 until padding) {
         buffer.writeByte(0x00)
       }
     }
@@ -84,7 +84,7 @@ class SdesChunk {
     this.ssrc = ssrc
   }
 
-  def encode(): ChannelBuffer = encode(this)
+  def encode(): ChannelBuffer = SdesChunk.encode(this)
 
   def addItem(item: SdesChunkItem): Boolean = {
     if (item.getType == SdesChunkItem.Type.NULL) {
@@ -96,11 +96,11 @@ class SdesChunk {
     this.items.add(item)
   }
 
-  def getItemValue(`type`: SdesChunkItem.Type): String = {
+  def getItemValue(`type`: SdesChunkItem.Type.Type): String = {
     if (this.items == null) {
       return null
     }
-    for (item <- this.items if item.getType == `type`) {
+    for (item ← this.items if item.getType == `type`) {
       return item.getValue
     }
     null

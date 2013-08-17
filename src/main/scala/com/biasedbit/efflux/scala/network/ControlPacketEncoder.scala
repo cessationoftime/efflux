@@ -1,8 +1,8 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.CompoundControlPacket
-import com.biasedbit.efflux.packet.ControlPacket
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.ControlPacket
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.channel.ChannelDownstreamHandler
@@ -46,14 +46,14 @@ class ControlPacketEncoder private () extends ChannelDownstreamHandler {
       } else if (e.getMessage.isInstanceOf[CompoundControlPacket]) {
         val packets = e.getMessage.asInstanceOf[CompoundControlPacket].getControlPackets
         val buffers = Array.ofDim[ChannelBuffer](packets.size)
-        for (i <- 0 until buffers.length) {
+        for (i ← 0 until buffers.length) {
           buffers(i) = packets.get(i).encode()
         }
         val compoundBuffer = ChannelBuffers.wrappedBuffer(buffers: _*)
         Channels.write(ctx, e.getFuture, compoundBuffer, e.getRemoteAddress)
       }
     } catch {
-      case e1: Exception => LOG.error("Failed to encode compound RTCP packet to send.", e1)
+      case e1: Exception ⇒ LOG.error("Failed to encode compound RTCP packet to send.", e1)
     }
   }
 }

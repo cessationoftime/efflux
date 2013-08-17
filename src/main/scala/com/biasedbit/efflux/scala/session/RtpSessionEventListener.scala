@@ -1,6 +1,6 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.participant.RtpParticipant
+import com.biasedbit.efflux.scala.participant.RtpParticipant
 import RtpSessionEventListener._
 //remove if not needed
 import scala.collection.JavaConversions._

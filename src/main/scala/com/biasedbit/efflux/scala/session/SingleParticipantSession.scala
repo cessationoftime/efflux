@@ -1,11 +1,11 @@
 package com.biasedbit.efflux.scala.session
 
-import com.biasedbit.efflux.packet.CompoundControlPacket
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.participant.ParticipantDatabase
-import com.biasedbit.efflux.participant.RtpParticipant
-import com.biasedbit.efflux.participant.SingleParticipantDatabase
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.packet.ControlPacket
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.participant.ParticipantDatabase
+import com.biasedbit.efflux.scala.participant.RtpParticipant
+import com.biasedbit.efflux.scala.participant.SingleParticipantDatabase
 import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor
 import org.jboss.netty.util.HashedWheelTimer
 import java.net.SocketAddress
@@ -15,7 +15,7 @@ import java.util.HashMap
 import java.util.Map
 import java.util.concurrent.atomic.AtomicBoolean
 import SingleParticipantSession._
-import scala.reflect.{BeanProperty, BooleanBeanProperty}
+import scala.reflect.{ BeanProperty, BooleanBeanProperty }
 //remove if not needed
 import scala.collection.JavaConversions._
 
@@ -43,12 +43,12 @@ object SingleParticipantSession {
  *
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>
  */
-class SingleParticipantSession(id: String, 
-    payloadTypes: Collection[Integer], 
-    localParticipant: RtpParticipant, 
-    remoteParticipant: RtpParticipant, 
-    timer: HashedWheelTimer, 
-    executor: OrderedMemoryAwareThreadPoolExecutor) extends AbstractRtpSession(id, payloadTypes, localParticipant, 
+class SingleParticipantSession(id: String,
+                               payloadTypes: Collection[Integer],
+                               localParticipant: RtpParticipant,
+                               remoteParticipant: RtpParticipant,
+                               timer: HashedWheelTimer,
+                               executor: OrderedMemoryAwareThreadPoolExecutor) extends AbstractRtpSession(id, payloadTypes, localParticipant,
   timer, executor) {
 
   private val receiver = remoteParticipant
@@ -68,36 +68,35 @@ class SingleParticipantSession(id: String,
   this.participantDatabase.asInstanceOf[SingleParticipantDatabase]
     .setParticipant(remoteParticipant)
 
-  def this(id: String, 
-      payloadType: Int, 
-      localParticipant: RtpParticipant, 
-      remoteParticipant: RtpParticipant) {
+  def this(id: String,
+           payloadType: Int,
+           localParticipant: RtpParticipant,
+           remoteParticipant: RtpParticipant,
+           timer: HashedWheelTimer,
+           executor: OrderedMemoryAwareThreadPoolExecutor) =
+    this(id, Collections.singleton(payloadType), localParticipant, remoteParticipant, timer, executor)
+
+  def this(id: String,
+           payloadType: Int,
+           localParticipant: RtpParticipant,
+           remoteParticipant: RtpParticipant) {
     this(id, payloadType, localParticipant, remoteParticipant, null, null)
   }
 
-  def this(id: String, 
-      payloadType: Int, 
-      localParticipant: RtpParticipant, 
-      remoteParticipant: RtpParticipant, 
-      executor: OrderedMemoryAwareThreadPoolExecutor) {
+  def this(id: String,
+           payloadType: Int,
+           localParticipant: RtpParticipant,
+           remoteParticipant: RtpParticipant,
+           executor: OrderedMemoryAwareThreadPoolExecutor) {
     this(id, payloadType, localParticipant, remoteParticipant, null, executor)
   }
 
-  def this(id: String, 
-      payloadType: Int, 
-      localParticipant: RtpParticipant, 
-      remoteParticipant: RtpParticipant, 
-      timer: HashedWheelTimer) {
+  def this(id: String,
+           payloadType: Int,
+           localParticipant: RtpParticipant,
+           remoteParticipant: RtpParticipant,
+           timer: HashedWheelTimer) {
     this(id, payloadType, localParticipant, remoteParticipant, timer, null)
-  }
-
-  def this(id: String, 
-      payloadType: Int, 
-      localParticipant: RtpParticipant, 
-      remoteParticipant: RtpParticipant, 
-      timer: HashedWheelTimer, 
-      executor: OrderedMemoryAwareThreadPoolExecutor) {
-    this(id, Collections.singleton(payloadType), localParticipant, remoteParticipant, timer, executor)
   }
 
   override def addReceiver(remoteParticipant: RtpParticipant): Boolean = {
@@ -131,7 +130,7 @@ class SingleParticipantSession(id: String,
       this.writeToData(packet, destination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception => LOG.error("Failed to send {} to {} in session with id {}.", this.id, this.receiver.getInfo)
+      case e: Exception ⇒ LOG.error("Failed to send {} to {} in session with id {}.", this.id, this.receiver.getInfo)
     }
   }
 
@@ -142,7 +141,7 @@ class SingleParticipantSession(id: String,
       this.writeToControl(packet, destination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception => LOG.error("Failed to send RTCP packet to {} in session with id {}.", this.receiver.getInfo, 
+      case e: Exception ⇒ LOG.error("Failed to send RTCP packet to {} in session with id {}.", this.receiver.getInfo,
         this.id)
     }
   }
@@ -152,7 +151,7 @@ class SingleParticipantSession(id: String,
       this.writeToControl(packet, this.receiver.getControlDestination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception => LOG.error("Failed to send compound RTCP packet to {} in session with id {}.", 
+      case e: Exception ⇒ LOG.error("Failed to send compound RTCP packet to {} in session with id {}.",
         this.receiver.getInfo, this.id)
     }
   }

@@ -1,6 +1,6 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.DataPacket
 import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.channel.Channel
 import org.jboss.netty.channel.ChannelHandler
@@ -16,7 +16,7 @@ object DataPacketEncoder {
 
   object InstanceHolder {
 
-    private val INSTANCE = new DataPacketEncoder()
+    private[DataPacketEncoder] val INSTANCE = new DataPacketEncoder()
   }
 }
 

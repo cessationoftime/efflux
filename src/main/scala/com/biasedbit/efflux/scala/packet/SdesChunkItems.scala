@@ -44,13 +44,13 @@ object SdesChunkItems {
   def decode(buffer: ChannelBuffer): SdesChunkItem = {
     val `type` = SdesChunkItem.Type.fromByte(buffer.readByte())
     `type` match {
-      case NULL => NULL_ITEM
-      case CNAME | NAME | EMAIL | PHONE | LOCATION | TOOL | NOTE => 
+      case NULL ⇒ NULL_ITEM
+      case CNAME | NAME | EMAIL | PHONE | LOCATION | TOOL | NOTE ⇒
         var value = Array.ofDim[Byte](buffer.readUnsignedByte())
         buffer.readBytes(value)
         new SdesChunkItem(`type`, new String(value, CharsetUtil.UTF_8))
 
-      case PRIV => 
+      case PRIV ⇒
         var valueLength = buffer.readUnsignedByte()
         var prefixLength = buffer.readUnsignedByte()
         value = Array.ofDim[Byte](valueLength - prefixLength - 1)
@@ -59,7 +59,7 @@ object SdesChunkItems {
         buffer.readBytes(value)
         new SdesChunkPrivItem(new String(prefix, CharsetUtil.UTF_8), new String(value, CharsetUtil.UTF_8))
 
-      case _ => throw new IllegalArgumentException("Unknown type of SDES chunk: " + `type`)
+      case _ ⇒ throw new IllegalArgumentException("Unknown type of SDES chunk: " + `type`)
     }
   }
 

@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.participant
 
-import com.biasedbit.efflux.packet.DataPacket
-import com.biasedbit.efflux.packet.SdesChunk
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.SdesChunk
 import java.net.SocketAddress
 import java.util.Collection
 import java.util.Map

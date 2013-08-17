@@ -8,14 +8,14 @@ import scala.collection.JavaConversions._
 
 object ReceiverReportPacket {
 
-  def decode(buffer: ChannelBuffer, 
-      hasPadding: Boolean, 
-      innerBlocks: Byte, 
-      length: Int): ReceiverReportPacket = {
+  def decode(buffer: ChannelBuffer,
+             hasPadding: Boolean,
+             innerBlocks: Byte,
+             length: Int): ReceiverReportPacket = {
     val packet = new ReceiverReportPacket()
     packet.setSenderSsrc(buffer.readUnsignedInt())
     var read = 4
-    for (i <- 0 until innerBlocks) {
+    for (i ← 0 until innerBlocks) {
       packet.addReceptionReportBlock(ReceptionReport.decode(buffer))
       read += 24
     }
@@ -58,12 +58,12 @@ object ReceiverReportPacket {
     buffer.writeShort(sizeInOctets)
     buffer.writeInt(packet.senderSsrc.toInt)
     if (packet.getReceptionReportCount > 0) {
-      for (block <- packet.receptionReports) {
+      for (block ← packet.receptionReports) {
         buffer.writeBytes(block.encode())
       }
     }
     if (padding > 0) {
-      for (i <- 0 until (padding - 1)) {
+      for (i ← 0 until (padding - 1)) {
         buffer.writeByte(0x00)
       }
       buffer.writeByte(padding)
@@ -75,13 +75,13 @@ object ReceiverReportPacket {
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class ReceiverReportPacket extends AbstractReportPacket {
+class ReceiverReportPacket extends AbstractReportPacket(ControlPacket.Type.RECEIVER_REPORT) {
 
   override def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer = {
-    encode(currentCompoundLength, fixedBlockSize, this)
+    ReceiverReportPacket.encode(currentCompoundLength, fixedBlockSize, this)
   }
 
-  override def encode(): ChannelBuffer = encode(0, 0, this)
+  override def encode(): ChannelBuffer = ReceiverReportPacket.encode(0, 0, this)
 
   override def toString(): String = {
     new StringBuilder().append("ReceiverReportPacket{")

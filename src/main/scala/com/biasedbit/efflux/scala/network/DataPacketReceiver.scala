@@ -1,6 +1,6 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.DataPacket
 import java.net.SocketAddress
 //remove if not needed
 import scala.collection.JavaConversions._
