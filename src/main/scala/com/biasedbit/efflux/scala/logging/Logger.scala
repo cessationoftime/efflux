@@ -71,7 +71,7 @@ class Logger(name: String) {
    * @param message   Message to be logged.
    * @param parameter Message parameter.
    */
-  def trace(message: String, parameter: AnyRef) {
+  def trace(message: String, parameter: Any) {
     this.logger.trace(message, parameter);
   }
 
@@ -81,9 +81,9 @@ class Logger(name: String) {
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
-  def trace(message: String, parameters: AnyRef*) {
+  def trace(message: String, parameters: Any*) {
     // This is where magic happens and syntax sugar is offered...
-    // The interface overrides an AnyRef[] and offers AnyRef* instead!
+    // The interface overrides an Any[] and offers Any* instead!
     // Awesome, ain't it? No. It should come as standard in SLF4J.
     this.logger.trace(message, parameters);
   }
@@ -107,16 +107,16 @@ class Logger(name: String) {
    * message, it is possible to have the best of both worlds.<br/> In order to avoid incurring the overhead of this
    * process, before doing it, a test to check if the log level is enabled is done.
    * <p/>
-   * NOTE: The order of the throwable and AnyRef array is switched due to Java language limitations, but the exception
+   * NOTE: The order of the throwable and Any array is switched due to Java language limitations, but the exception
    * always shows up AFTER the formatted message.
    *
    * @param message    Message to be formatted.
    * @param throwable  Throwable to be logged.
    * @param parameters Parameters to format the message.
    */
-  def trace(message: String, throwable: Throwable, parameters: AnyRef*) {
+  def trace(message: String, throwable: Throwable, parameters: Any*) {
     if (this.logger.isTraceEnabled()) {
-      this.logger.trace(MessageFormatter.arrayFormat(message, parameters.toArray).getMessage(), throwable);
+      this.logger.trace(MessageFormatter.arrayFormat(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object])).getMessage(), throwable);
     }
   }
 
@@ -140,7 +140,7 @@ class Logger(name: String) {
    * @param message   Message to be logged.
    * @param parameter Message parameter.
    */
-  def debug(message: String, parameter: AnyRef) {
+  def debug(message: String, parameter: Any) {
     this.logger.debug(message, parameter);
   }
 
@@ -150,7 +150,7 @@ class Logger(name: String) {
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
-  def debug(message: String, parameters: AnyRef*) {
+  def debug(message: String, parameters: Any*) {
     this.logger.debug(message, parameters);
   }
 
@@ -173,16 +173,16 @@ class Logger(name: String) {
    * message, it is possible to have the best of both worlds.<br/> In order to avoid incurring the overhead of this
    * process, before doing it, a test to check if the log level is enabled is done.
    * <p/>
-   * NOTE: The order of the throwable and AnyRef array is switched due to Java language limitations, but the exception
+   * NOTE: The order of the throwable and Any array is switched due to Java language limitations, but the exception
    * always shows up AFTER the formatted message.
    *
    * @param message    Message to be formatted.
    * @param throwable  Throwable to be logged.
    * @param parameters Parameters to format the message.
    */
-  def debug(message: String, throwable: Throwable, parameters: AnyRef*) {
+  def debug(message: String, throwable: Throwable, parameters: Any*) {
     if (this.logger.isDebugEnabled()) {
-      this.logger.debug(MessageFormatter.arrayFormat(message, parameters.toArray).getMessage(), throwable);
+      this.logger.debug(MessageFormatter.arrayFormat(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object])).getMessage(), throwable);
     }
   }
 
@@ -208,7 +208,7 @@ class Logger(name: String) {
    * @param message   Message to be logged.
    * @param parameter Message parameter.
    */
-  def info(message: String, parameter: AnyRef) {
+  def info(message: String, parameter: Any) {
     this.logger.info(message, parameter);
   }
 
@@ -218,7 +218,7 @@ class Logger(name: String) {
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
-  def info(message: String, parameters: AnyRef*) {
+  def info(message: String, parameters: Any*) {
     this.logger.info(message, parameters);
   }
 
@@ -241,16 +241,16 @@ class Logger(name: String) {
    * message, it is possible to have the best of both worlds.<br/> In order to avoid incurring the overhead of this
    * process, before doing it, a test to check if the log level is enabled is done.
    * <p/>
-   * NOTE: The order of the throwable and AnyRef array is switched due to Java language limitations, but the exception
+   * NOTE: The order of the throwable and Any array is switched due to Java language limitations, but the exception
    * always shows up AFTER the formatted message.
    *
    * @param message    Message to be formatted.
    * @param throwable  Throwable to be logged.
    * @param parameters Parameters to format the message.
    */
-  def info(message: String, throwable: Throwable, parameters: AnyRef*) {
+  def info(message: String, throwable: Throwable, parameters: Any*) {
     if (this.logger.isInfoEnabled()) {
-      this.logger.info(MessageFormatter.arrayFormat(message, parameters.toArray).getMessage(), throwable);
+      this.logger.info(MessageFormatter.arrayFormat(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object])).getMessage(), throwable);
     }
   }
 
@@ -276,7 +276,7 @@ class Logger(name: String) {
    * @param message   Message to be logged.
    * @param parameter Message parameter.
    */
-  def warn(message: String, parameter: AnyRef) {
+  def warn(message: String, parameter: Any) {
     this.logger.warn(message, parameter);
   }
 
@@ -286,7 +286,7 @@ class Logger(name: String) {
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
-  def warn(message: String, parameters: AnyRef*) {
+  def warn(message: String, parameters: Any*) {
     this.logger.warn(message, parameters);
   }
 
@@ -309,16 +309,16 @@ class Logger(name: String) {
    * message, it is possible to have the best of both worlds.<br/> In order to avoid incurring the overhead of this
    * process, before doing it, a test to check if the log level is enabled is done.
    * <p/>
-   * NOTE: The order of the throwable and AnyRef array is switched due to Java language limitations, but the exception
+   * NOTE: The order of the throwable and Any array is switched due to Java language limitations, but the exception
    * always shows up AFTER the formatted message.
    *
    * @param message    Message to be formatted.
    * @param throwable  Throwable to be logged.
    * @param parameters Parameters to format the message.
    */
-  def warn(message: String, throwable: Throwable, parameters: AnyRef*) {
+  def warn(message: String, throwable: Throwable, parameters: Any*) {
     if (this.logger.isWarnEnabled()) {
-      this.logger.warn(MessageFormatter.arrayFormat(message, parameters.toArray).getMessage(), throwable);
+      this.logger.warn(MessageFormatter.arrayFormat(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object])).getMessage(), throwable);
     }
   }
 
@@ -344,7 +344,7 @@ class Logger(name: String) {
    * @param message   Message to be logged.
    * @param parameter Message parameter.
    */
-  def error(message: String, parameter: AnyRef) {
+  def error(message: String, parameter: Any) {
     this.logger.error(message, parameter);
   }
 
@@ -354,7 +354,7 @@ class Logger(name: String) {
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
-  def error(message: String, parameters: AnyRef*) {
+  def error(message: String, parameters: Any*) {
     this.logger.error(message, parameters);
   }
 
@@ -377,16 +377,16 @@ class Logger(name: String) {
    * message, it is possible to have the best of both worlds.<br/> In order to avoid incurring the overhead of this
    * process, before doing it, a test to check if the log level is enabled is done.
    * <p/>
-   * NOTE: The order of the throwable and AnyRef array is switched due to Java language limitations, but the exception
+   * NOTE: The order of the throwable and Any array is switched due to Java language limitations, but the exception
    * always shows up AFTER the formatted message.
    *
    * @param message    Message to be formatted.
    * @param throwable  Throwable to be logged.
    * @param parameters Parameters to format the message.
    */
-  def error(message: String, throwable: Throwable, parameters: AnyRef*) {
+  def error(message: String, throwable: Throwable, parameters: Any*) {
     if (this.logger.isErrorEnabled()) {
-      this.logger.error(MessageFormatter.arrayFormat(message, parameters.toArray).getMessage(), throwable);
+      this.logger.error(MessageFormatter.arrayFormat(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object])).getMessage(), throwable);
     }
   }
 }
