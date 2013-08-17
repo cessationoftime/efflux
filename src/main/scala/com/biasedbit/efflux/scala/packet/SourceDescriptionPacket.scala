@@ -56,10 +56,10 @@ object SourceDescriptionPacket {
     buffer = ChannelBuffers.buffer(size)
     var b = packet.getVersion.getByte
     if (padding > 0) {
-      b |= 0x20
+      b = (b | 0x20).toByte
     }
     if (packet.chunks != null) {
-      b |= packet.chunks.size
+      b = (b | packet.chunks.size).toByte
     }
     buffer.writeByte(b)
     buffer.writeByte(packet.`type`.getByte)

@@ -11,11 +11,6 @@ object RtpVersion extends Enumeration {
 
   val V0 = new RtpVersion(0x00.toByte)
 
-  class RtpVersion private[RtpVersion] (val b: Byte) extends Val {
-
-    def getByte(): Byte = b
-  }
-
   def fromByte(b: Byte): RtpVersion = {
     val tmp = (b & 0xc0).toByte
     for (version ← values if version.getByte == tmp) {
@@ -25,4 +20,8 @@ object RtpVersion extends Enumeration {
   }
 
   implicit def convertValue(v: Value): RtpVersion = v.asInstanceOf[RtpVersion]
+}
+class RtpVersion private[RtpVersion] (val b: Byte) extends scala.Enumeration.Val {
+
+  def getByte(): Byte = b
 }

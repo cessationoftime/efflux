@@ -10,7 +10,7 @@ import scala.collection.JavaConversions._
 /**
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
-class SdesChunkPrivItem protected (@BeanProperty val prefix: String, value: String)
+class SdesChunkPrivItem protected[packet] (@BeanProperty val prefix: String, value: String)
   extends SdesChunkItem(SdesChunkItem.Type.PRIV, value) {
 
   override def encode(): ChannelBuffer = {

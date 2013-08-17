@@ -54,9 +54,9 @@ object SenderReportPacket {
     buffer = ChannelBuffers.buffer(size)
     var b = packet.getVersion.getByte
     if (padding > 0) {
-      b |= 0x20
+      b = (b | 0x20).toByte
     }
-    b |= packet.getReceptionReportCount
+    b = (b | packet.getReceptionReportCount).toByte
     buffer.writeByte(b)
     buffer.writeByte(packet.`type`.getByte)
     val sizeInOctets = (size / 4) - 1

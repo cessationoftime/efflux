@@ -74,16 +74,16 @@ object DataPacket {
     val buffer = ChannelBuffers.buffer(size)
     var b = packet.getVersion.getByte
     if (padding > 0) {
-      b |= 0x20
+      b = (b | 0x20).toByte
     }
     if (packet.hasExtension()) {
-      b |= 0x10
+      b = (b | 0x10).toByte
     }
-    b |= packet.getContributingSourcesCount
+    b = (b | packet.getContributingSourcesCount).toByte
     buffer.writeByte(b)
     b = packet.getPayloadType.toByte
     if (packet.hasMarker()) {
-      b |= 0x80
+      b = (b | 0x80).toByte
     }
     buffer.writeByte(b)
     buffer.writeShort(packet.sequenceNumber)
@@ -138,13 +138,15 @@ object DataPacket {
  */
 class DataPacket {
 
-  @BeanProperty
   var version: RtpVersion = RtpVersion.V2
+
+  def getVersion = version
 
   private var marker: Boolean = _
 
-  @BeanProperty
   var payloadType: Int = _
+
+  def getPayloadType = payloadType
 
   @BeanProperty
   var sequenceNumber: Int = _
@@ -152,8 +154,9 @@ class DataPacket {
   @BeanProperty
   var timestamp: Long = _
 
-  @BeanProperty
   var ssrc: Long = _
+
+  def getSsrc = ssrc
 
   @BeanProperty
   var extensionHeaderData: Short = _
@@ -164,8 +167,9 @@ class DataPacket {
   @BeanProperty
   var contributingSourceIds: List[Long] = _
 
-  @BeanProperty
   var data: ChannelBuffer = _
+
+  def getData = data
 
   def encode(fixedBlockSize: Int): ChannelBuffer = DataPacket.encode(fixedBlockSize, this)
 
@@ -238,6 +242,10 @@ class DataPacket {
 
   def setData(data: ChannelBuffer) {
     this.data = data
+  }
+
+  def setData(data: Array[Byte]) {
+    this.data = ChannelBuffers.wrappedBuffer(data);
   }
 
   def getDataAsArray(): Array[Byte] = this.data.array()

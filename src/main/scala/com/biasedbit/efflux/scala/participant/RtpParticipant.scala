@@ -67,10 +67,8 @@ object RtpParticipant {
  */
 class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
 
-  @BeanProperty
   var dataDestination: SocketAddress = _
 
-  @BeanProperty
   var controlDestination: SocketAddress = _
 
   @BeanProperty
@@ -87,8 +85,6 @@ class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
 
   @BeanProperty
   var lastSequenceNumber: Int = -1
-
-  private var receivedSdes: Boolean = _
 
   private val receivedByteCounter = new AtomicLong()
 
@@ -114,9 +110,13 @@ class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
     this.byeReceptionInstant = TimeUtils.now()
   }
 
+  private var receivedSdesFlag: Boolean = false
+
   def receivedSdes() {
-    this.receivedSdes = true
+    this.receivedSdesFlag = true
   }
+
+  def hasReceivedSdes(): Boolean = receivedSdesFlag
 
   def packetReceived() {
     this.lastReceptionInstant = TimeUtils.now()
@@ -134,7 +134,8 @@ class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
 
   def getReceivedBytes(): Long = this.receivedByteCounter.get
 
-  def hasReceivedSdes(): Boolean = receivedSdes
+  def getDataDestination = dataDestination
+  def getControlDestination = controlDestination
 
   def setDataDestination(dataDestination: SocketAddress) {
     if (dataDestination == null) {

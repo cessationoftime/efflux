@@ -16,7 +16,7 @@ object SdesChunk {
     val chunk = new SdesChunk()
     chunk.ssrc = buffer.readUnsignedInt()
     var read = 0
-    while (true) {
+    def WhileTrue(): SdesChunk = {
       if (buffer.readableBytes() == 0) {
         return chunk
       }
@@ -31,7 +31,9 @@ object SdesChunk {
         return chunk
       }
       chunk.addItem(item)
+      return WhileTrue()
     }
+    return WhileTrue()
   }
 
   def encode(chunk: SdesChunk): ChannelBuffer = {
@@ -74,8 +76,9 @@ object SdesChunk {
  */
 class SdesChunk {
 
-  @BeanProperty
   var ssrc: Long = _
+
+  def getSsrc = ssrc
 
   private var items: List[SdesChunkItem] = _
 

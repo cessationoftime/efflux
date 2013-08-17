@@ -42,19 +42,19 @@ object SdesChunkItems {
   def createPrivItem(prefix: String, value: String): SdesChunkPrivItem = new SdesChunkPrivItem(prefix, value)
 
   def decode(buffer: ChannelBuffer): SdesChunkItem = {
+    import SdesChunkItem.Type._
     val `type` = SdesChunkItem.Type.fromByte(buffer.readByte())
     `type` match {
       case NULL ⇒ NULL_ITEM
       case CNAME | NAME | EMAIL | PHONE | LOCATION | TOOL | NOTE ⇒
-        var value = Array.ofDim[Byte](buffer.readUnsignedByte())
+        val value = Array.ofDim[Byte](buffer.readUnsignedByte())
         buffer.readBytes(value)
         new SdesChunkItem(`type`, new String(value, CharsetUtil.UTF_8))
-
       case PRIV ⇒
-        var valueLength = buffer.readUnsignedByte()
-        var prefixLength = buffer.readUnsignedByte()
-        value = Array.ofDim[Byte](valueLength - prefixLength - 1)
-        var prefix = Array.ofDim[Byte](prefixLength)
+        val valueLength = buffer.readUnsignedByte()
+        val prefixLength = buffer.readUnsignedByte()
+        val value = Array.ofDim[Byte](valueLength - prefixLength - 1)
+        val prefix = Array.ofDim[Byte](prefixLength)
         buffer.readBytes(prefix)
         buffer.readBytes(value)
         new SdesChunkPrivItem(new String(prefix, CharsetUtil.UTF_8), new String(value, CharsetUtil.UTF_8))

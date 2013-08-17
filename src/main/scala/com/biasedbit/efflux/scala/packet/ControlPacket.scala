@@ -44,7 +44,7 @@ object ControlPacket {
 
     val APP_DATA = new Type(0xcc.toByte)
 
-    class Type(var b: Byte) extends scala.Enumeration.Val {
+    class Type(var b: Byte) extends Val {
 
       def getByte(): Byte = this.b
     }
@@ -58,7 +58,7 @@ object ControlPacket {
       case _    ⇒ throw new IllegalArgumentException("Unknown RTCP packet type: " + b)
     }
 
-    implicit def convertValue(v: scala.Enumeration.Value): Type = v.asInstanceOf[Type]
+    implicit def convertValue(v: Value): Type = v.asInstanceOf[Type]
   }
 }
 

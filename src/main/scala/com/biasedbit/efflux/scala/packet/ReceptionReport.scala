@@ -39,28 +39,29 @@ object ReceptionReport {
  */
 class ReceptionReport {
 
-  @BeanProperty
   var ssrc: Long = _
+  def getSsrc = ssrc
 
-  @BeanProperty
   var fractionLost: Short = _
+  def getFractionLost = fractionLost
 
-  @BeanProperty
   var cumulativeNumberOfPacketsLost: Int = _
+  def getCumulativeNumberOfPacketsLost = cumulativeNumberOfPacketsLost
 
-  @BeanProperty
   var extendedHighestSequenceNumberReceived: Long = _
+  def getExtendedHighestSequenceNumberReceived = extendedHighestSequenceNumberReceived
 
-  @BeanProperty
   var interArrivalJitter: Long = _
+  def getInterArrivalJitter = interArrivalJitter
 
-  @BeanProperty
   var lastSenderReport: Long = _
+  def getLastSenderReport = lastSenderReport
 
-  @BeanProperty
   var delaySinceLastSenderReport: Long = _
 
-  def encode(): ChannelBuffer = encode(this)
+  def getDelaySinceLastSenderReport = delaySinceLastSenderReport
+
+  def encode(): ChannelBuffer = ReceptionReport.encode(this)
 
   def setSsrc(ssrc: Long) {
     if ((ssrc < 0) || (ssrc > 0xffffffffL)) {
