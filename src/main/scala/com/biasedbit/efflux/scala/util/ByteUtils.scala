@@ -38,7 +38,8 @@ object ByteUtils {
           buf.append(('a' + (halfbyte - 10)).toChar)
         }
         halfbyte = aData & 0x0F
-      } while (two_halfs += 1 < 1);
+        two_halfs = two_halfs + 1
+      } while (two_halfs < 1);
     }
     buf.toString
   }

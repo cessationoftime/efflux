@@ -1,6 +1,6 @@
 package com.biasedbit.efflux.scala.participant
 
-import com.biasedbit.efflux.logging.Logger
+import com.biasedbit.efflux.scala.logging.Logger
 import com.biasedbit.efflux.scala.packet.DataPacket
 import com.biasedbit.efflux.scala.packet.SdesChunk
 import com.biasedbit.efflux.scala.packet.SdesChunkItem

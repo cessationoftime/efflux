@@ -18,7 +18,7 @@ import java.util.Collections
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
 class MultiParticipantSession(id: String,
-                              payloadTypes: Collection[Integer],
+                              payloadTypes: Collection[Int],
                               localParticipant: RtpParticipant,
                               timer: HashedWheelTimer,
                               executor: OrderedMemoryAwareThreadPoolExecutor)

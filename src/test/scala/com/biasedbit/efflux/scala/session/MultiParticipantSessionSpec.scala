@@ -5,28 +5,13 @@ import org.scalatest.matchers.MustMatchers
 import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.RtpVersion
-import com.biasedbit.efflux.packet.SourceDescriptionPacket
-import com.biasedbit.efflux.packet.SdesChunkPrivItem
-import com.biasedbit.efflux.participant.RtpParticipant
 import org.scalatest.BeforeAndAfter
-import com.biasedbit.efflux.session.MultiParticipantSession
-import com.biasedbit.efflux.session.RtpSessionEventListener
-import com.biasedbit.efflux.session.RtpSession
-import com.biasedbit.efflux.packet.DataPacket
 import java.net.SocketAddress
 import java.net.InetSocketAddress
 import java.util.concurrent.atomic.AtomicInteger
-import com.biasedbit.efflux.session.RtpSessionDataListener
-import com.biasedbit.efflux.participant.RtpParticipantInfo
+import com.biasedbit.efflux.scala.participant.RtpParticipant
+import com.biasedbit.efflux.scala.packet.DataPacket
+import com.biasedbit.efflux.scala.participant.RtpParticipantInfo
 
 class MultiParticipantSessionSpec extends WordSpec with MustMatchers with BeforeAndAfter {
   var session: MultiParticipantSession = null;

@@ -152,7 +152,7 @@ class RtpParticipant private (@BeanProperty val info: RtpParticipantInfo) {
   }
 
   override def equals(o: Any): Boolean = {
-    if (this == o) {
+    if (super.equals(o)) {
       return true
     }
     if (!(o.isInstanceOf[RtpParticipant])) {

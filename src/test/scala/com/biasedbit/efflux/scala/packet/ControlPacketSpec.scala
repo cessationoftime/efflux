@@ -18,12 +18,10 @@ package com.biasedbit.efflux.scala.packet
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
+import com.biasedbit.efflux.scala.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import org.junit.Test
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
 import java.util.ArrayList
 //import collection.JavaConversions._
 class ControlPacketSpec extends WordSpec with MustMatchers {

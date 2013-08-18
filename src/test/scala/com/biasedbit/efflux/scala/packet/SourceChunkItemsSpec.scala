@@ -2,17 +2,9 @@ package com.biasedbit.efflux.scala.packet
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SdesChunkPrivItem
+import com.biasedbit.efflux.scala.util.ByteUtils
 
 class SourceChunkItemsSpec extends WordSpec with MustMatchers {
 

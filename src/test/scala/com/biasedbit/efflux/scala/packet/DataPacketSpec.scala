@@ -18,13 +18,12 @@ package com.biasedbit.efflux.scala.packet
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
+import com.biasedbit.efflux.scala.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
 import java.util.ArrayList
 import java.util.Arrays;
 
-import com.biasedbit.efflux.packet._
 import scala.collection.JavaConversions._
 object DataPacketSpec {
   val ALAW_RTP_PACKET_SAMPLE: Array[Byte] = Array(0x80, 0x88, 0x19, 0x73, 0x00, 0x01, 0x95, 0x14,
@@ -74,14 +73,14 @@ class DataPacketSpec extends WordSpec with MustMatchers {
 
     "testDecode" in {
       val packet = DataPacket.decode(ALAW_RTP_PACKET_SAMPLE);
-      RtpVersion.V2 must equal(packet.getVersion());
+      RtpVersion.V2 must equal(packet.getVersion);
       packet.hasExtension must equal(false);
       0 must equal(packet.getContributingSourcesCount());
       packet.hasMarker must equal(true);
-      8 must equal(packet.getPayloadType());
+      8 must equal(packet.getPayloadType);
       6515 must equal(packet.getSequenceNumber());
       103700 must equal(packet.getTimestamp());
-      0x1fcc779a must equal(packet.getSsrc());
+      0x1fcc779a must equal(packet.getSsrc);
       6 must equal(packet.getDataSize());
     }
 
@@ -115,12 +114,12 @@ class DataPacketSpec extends WordSpec with MustMatchers {
       val buffer = packet.encode();
 
       val decoded = DataPacket.decode(buffer);
-      packet.getVersion() must equal(decoded.getVersion());
+      packet.getVersion must equal(decoded.getVersion);
       packet.hasMarker() must equal(decoded.hasMarker());
-      packet.getPayloadType() must equal(decoded.getPayloadType());
+      packet.getPayloadType must equal(decoded.getPayloadType);
       packet.getSequenceNumber() must equal(decoded.getSequenceNumber());
       packet.getTimestamp() must equal(decoded.getTimestamp());
-      packet.getSsrc() must equal(decoded.getSsrc());
+      packet.getSsrc must equal(decoded.getSsrc);
       packet.getExtensionDataSize() must equal(decoded.getExtensionDataSize());
       packet.getExtensionHeaderData() must equal(decoded.getExtensionHeaderData());
       packet.getExtensionData() must equal(packet.getExtensionData());
@@ -137,12 +136,12 @@ class DataPacketSpec extends WordSpec with MustMatchers {
       h263packet.length must equal(1145);
 
       val packet = DataPacket.decode(h263packet);
-      RtpVersion.V2 must equal(packet.getVersion());
+      RtpVersion.V2 must equal(packet.getVersion);
       packet.hasExtension must equal(false);
       packet.hasMarker must equal(true);
       4664 must equal(packet.getSequenceNumber());
       1248975 must equal(packet.getTimestamp());
-      0x4fbc4ca1 must equal(packet.getSsrc());
+      0x4fbc4ca1 must equal(packet.getSsrc);
       1145 - 12 must equal(packet.getDataSize());
       System.err.println(packet);
     }
@@ -165,9 +164,9 @@ class DataPacketSpec extends WordSpec with MustMatchers {
       0 must equal(encoded.readableBytes());
 
       packet.hasMarker() must equal(decoded.hasMarker());
-      packet.getSsrc() must equal(decoded.getSsrc());
+      packet.getSsrc must equal(decoded.getSsrc);
       packet.getSequenceNumber() must equal(decoded.getSequenceNumber());
-      packet.getPayloadType() must equal(decoded.getPayloadType());
+      packet.getPayloadType must equal(decoded.getPayloadType);
       packet.getTimestamp() must equal(decoded.getTimestamp());
       decoded.getData must not equal (null)
       packet.getDataSize() must equal(decoded.getDataSize());

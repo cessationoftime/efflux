@@ -18,7 +18,7 @@ trait RtpSession extends DataPacketReceiver with ControlPacketReceiver {
 
   def getId(): String
 
-  def getPayloadType(): Set[Integer]
+  def getPayloadType(): Set[Int]
 
   def init(): Boolean
 

@@ -83,12 +83,12 @@ object AbstractRtpSession {
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
 abstract class AbstractRtpSession(protected val id: String,
-                                  _payloadTypes: Collection[Integer],
+                                  _payloadTypes: Collection[Int],
                                   local: RtpParticipant,
                                   _timer: HashedWheelTimer,
                                   protected val executor: OrderedMemoryAwareThreadPoolExecutor) extends RtpSession with TimerTask {
 
-  protected val payloadTypes = new HashSet[Integer]()
+  protected val payloadTypes = new HashSet[Int]()
 
   protected var host: String = _
 
@@ -175,7 +175,7 @@ abstract class AbstractRtpSession(protected val id: String,
 
   override def getId(): String = id
 
-  override def getPayloadType(): Set[Integer] = this.payloadTypes
+  override def getPayloadType(): Set[Int] = this.payloadTypes
 
   override def init(): Boolean = {
     synchronized {

@@ -2,12 +2,9 @@ package com.biasedbit.efflux.scala.packet
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
+import com.biasedbit.efflux.scala.util.ByteUtils
 
 class ReceiverReportPacketSpec extends WordSpec with MustMatchers {
 

@@ -49,7 +49,7 @@ object ControlPacket {
       def getByte(): Byte = this.b
     }
 
-    def fromByte(b: Byte): Type = b.toInt match {
+    def fromByte(b: Byte): Type = (b.toInt & 0xff) match {
       case 0xc8 ⇒ SENDER_REPORT
       case 0xc9 ⇒ RECEIVER_REPORT
       case 0xca ⇒ SOURCE_DESCRIPTION

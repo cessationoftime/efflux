@@ -25,7 +25,7 @@ class SingleParticipantDatabase(@BeanProperty var id: String) extends Participan
 
   private var participant: RtpParticipant = _
 
-  override def getReceivers(): Collection[RtpParticipant] = Arrays.asList(this.participant: _*)
+  override def getReceivers(): Collection[RtpParticipant] = Arrays.asList(this.participant)
 
   override def getMembers(): Map[Long, RtpParticipant] = {
     val map = new HashMap[Long, RtpParticipant](1)

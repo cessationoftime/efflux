@@ -44,7 +44,7 @@ object SingleParticipantSession {
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>
  */
 class SingleParticipantSession(id: String,
-                               payloadTypes: Collection[Integer],
+                               payloadTypes: Collection[Int],
                                localParticipant: RtpParticipant,
                                remoteParticipant: RtpParticipant,
                                timer: HashedWheelTimer,

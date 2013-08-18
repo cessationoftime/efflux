@@ -1,14 +1,9 @@
 package com.biasedbit.efflux.scala.packet
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
+import com.biasedbit.efflux.scala.util.ByteUtils
 
 class SenderReportPacketSpec extends WordSpec with MustMatchers {
 
@@ -27,9 +22,9 @@ class SenderReportPacketSpec extends WordSpec with MustMatchers {
       val srPacket: SenderReportPacket = controlPacket.asInstanceOf[SenderReportPacket];
 
       0x4f52eb38L must equal(srPacket.getSenderSsrc());
-      2837347289L must equal(srPacket.getRtpTimestamp());
-      2 must equal(srPacket.getSenderPacketCount());
-      2 must equal(srPacket.getSenderOctetCount());
+      2837347289L must equal(srPacket.getRtpTimestamp);
+      2 must equal(srPacket.getSenderPacketCount);
+      2 must equal(srPacket.getSenderOctetCount);
       0 must equal(srPacket.getReceptionReportCount());
       srPacket.getReceptionReports() must equal(null);
 
@@ -49,9 +44,9 @@ class SenderReportPacketSpec extends WordSpec with MustMatchers {
       val srPacket: SenderReportPacket = controlPacket.asInstanceOf[SenderReportPacket];
 
       0xe6aa996eL must equal(srPacket.getSenderSsrc());
-      1815220L must equal(srPacket.getRtpTimestamp());
-      523 must equal(srPacket.getSenderPacketCount());
-      89956 must equal(srPacket.getSenderOctetCount());
+      1815220L must equal(srPacket.getRtpTimestamp);
+      523 must equal(srPacket.getSenderPacketCount);
+      89956 must equal(srPacket.getSenderOctetCount);
       0 must equal(srPacket.getReceptionReportCount());
       srPacket.getReceptionReports() must equal(null);
 
@@ -91,24 +86,24 @@ class SenderReportPacketSpec extends WordSpec with MustMatchers {
       val srPacket: SenderReportPacket = controlPacket.asInstanceOf[SenderReportPacket];
 
       0x45 must equal(srPacket.getNtpTimestamp());
-      0x45 must equal(srPacket.getRtpTimestamp());
-      20 must equal(srPacket.getSenderOctetCount());
-      2 must equal(srPacket.getSenderPacketCount());
+      0x45 must equal(srPacket.getRtpTimestamp);
+      20 must equal(srPacket.getSenderOctetCount);
+      2 must equal(srPacket.getSenderPacketCount);
       srPacket.getReceptionReports() must not equal (null);
       2 must equal(srPacket.getReceptionReportCount());
       2 must equal(srPacket.getReceptionReports().size());
-      10 must equal(srPacket.getReceptionReports().get(0).getSsrc());
-      11 must equal(srPacket.getReceptionReports().get(0).getCumulativeNumberOfPacketsLost());
-      12 must equal(srPacket.getReceptionReports().get(0).getFractionLost());
-      13 must equal(srPacket.getReceptionReports().get(0).getDelaySinceLastSenderReport());
-      14 must equal(srPacket.getReceptionReports().get(0).getInterArrivalJitter());
-      15 must equal(srPacket.getReceptionReports().get(0).getExtendedHighestSequenceNumberReceived());
-      20 must equal(srPacket.getReceptionReports().get(1).getSsrc());
-      21 must equal(srPacket.getReceptionReports().get(1).getCumulativeNumberOfPacketsLost());
-      22 must equal(srPacket.getReceptionReports().get(1).getFractionLost());
-      23 must equal(srPacket.getReceptionReports().get(1).getDelaySinceLastSenderReport());
-      24 must equal(srPacket.getReceptionReports().get(1).getInterArrivalJitter());
-      25 must equal(srPacket.getReceptionReports().get(1).getExtendedHighestSequenceNumberReceived());
+      10 must equal(srPacket.getReceptionReports().get(0).getSsrc);
+      11 must equal(srPacket.getReceptionReports().get(0).getCumulativeNumberOfPacketsLost);
+      12 must equal(srPacket.getReceptionReports().get(0).getFractionLost);
+      13 must equal(srPacket.getReceptionReports().get(0).getDelaySinceLastSenderReport);
+      14 must equal(srPacket.getReceptionReports().get(0).getInterArrivalJitter);
+      15 must equal(srPacket.getReceptionReports().get(0).getExtendedHighestSequenceNumberReceived);
+      20 must equal(srPacket.getReceptionReports().get(1).getSsrc);
+      21 must equal(srPacket.getReceptionReports().get(1).getCumulativeNumberOfPacketsLost);
+      22 must equal(srPacket.getReceptionReports().get(1).getFractionLost);
+      23 must equal(srPacket.getReceptionReports().get(1).getDelaySinceLastSenderReport);
+      24 must equal(srPacket.getReceptionReports().get(1).getInterArrivalJitter);
+      25 must equal(srPacket.getReceptionReports().get(1).getExtendedHighestSequenceNumberReceived);
 
       0 must equal(encoded.readableBytes());
     }

@@ -138,7 +138,7 @@ object DataPacket {
  */
 class DataPacket {
 
-  var version: RtpVersion = RtpVersion.V2
+  var version: RtpVersion.RtpVersion = RtpVersion.V2
 
   def getVersion = version
 
@@ -211,7 +211,7 @@ class DataPacket {
     this.extensionData = extensionData
   }
 
-  def setVersion(version: RtpVersion) {
+  def setVersion(version: RtpVersion.RtpVersion) {
     if (version != RtpVersion.V2) {
       throw new IllegalArgumentException("Only V2 is supported")
     }

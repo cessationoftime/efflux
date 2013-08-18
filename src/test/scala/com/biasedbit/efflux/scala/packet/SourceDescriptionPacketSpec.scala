@@ -2,20 +2,9 @@ package com.biasedbit.efflux.scala.packet
 
 import org.scalatest.WordSpec
 import org.scalatest.matchers.MustMatchers
-import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.RtpVersion
-import com.biasedbit.efflux.packet.SourceDescriptionPacket
-import com.biasedbit.efflux.packet.SdesChunkPrivItem
+import com.biasedbit.efflux.scala.util.ByteUtils
 
 class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
 
@@ -34,7 +23,7 @@ class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
       val sdesPacket: SourceDescriptionPacket = controlPacket.asInstanceOf[SourceDescriptionPacket];
       sdesPacket.getChunks() must not equal (null);
       1 must equal(sdesPacket.getChunks().size());
-      0x4f52eb38 must equal(sdesPacket.getChunks().get(0).getSsrc());
+      0x4f52eb38 must equal(sdesPacket.getChunks().get(0).getSsrc);
       sdesPacket.getChunks().get(0).getItems() must not equal (null);
       1 must equal(sdesPacket.getChunks().get(0).getItems().size());
       SdesChunkItem.Type.CNAME must equal(sdesPacket.getChunks().get(0).getItems().get(0).getType());
@@ -58,7 +47,7 @@ class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
       val sdesPacket: SourceDescriptionPacket = controlPacket.asInstanceOf[SourceDescriptionPacket];
       sdesPacket.getChunks() must not equal (null);
       1 must equal(sdesPacket.getChunks().size());
-      0xe6aa996eL must equal(sdesPacket.getChunks().get(0).getSsrc());
+      0xe6aa996eL must equal(sdesPacket.getChunks().get(0).getSsrc);
       sdesPacket.getChunks().get(0).getItems() must not equal (null);
       2 must equal(sdesPacket.getChunks().get(0).getItems().size());
       SdesChunkItem.Type.CNAME must equal(sdesPacket.getChunks().get(0).getItems().get(0).getType());
@@ -95,7 +84,7 @@ class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
       decodedSdes.getChunks() must not equal (null);
       2 must equal(decodedSdes.getChunks().size());
 
-      0x45 must equal(decodedSdes.getChunks().get(0).getSsrc());
+      0x45 must equal(decodedSdes.getChunks().get(0).getSsrc);
       decodedSdes.getChunks().get(0).getItems() must not equal (null);
       SdesChunkItem.Type.CNAME must equal(decodedSdes.getChunks().get(0).getItems().get(0).getType());
       "karma" must equal(decodedSdes.getChunks().get(0).getItems().get(0).getValue());
@@ -104,7 +93,7 @@ class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
       SdesChunkItem.Type.NOTE must equal(decodedSdes.getChunks().get(0).getItems().get(2).getType());
       "Hey crabman" must equal(decodedSdes.getChunks().get(0).getItems().get(2).getValue());
 
-      0x46 must equal(decodedSdes.getChunks().get(1).getSsrc());
+      0x46 must equal(decodedSdes.getChunks().get(1).getSsrc);
       decodedSdes.getChunks().get(1).getItems() must not equal (null);
       SdesChunkItem.Type.CNAME must equal(decodedSdes.getChunks().get(1).getItems().get(0).getType());
       "Randy" must equal(decodedSdes.getChunks().get(1).getItems().get(0).getValue());
@@ -136,14 +125,14 @@ class SourceDescriptionPacketSpec extends WordSpec with MustMatchers {
       decodedSdes.getChunks() must not equal (null);
       2 must equal(decodedSdes.getChunks().size());
 
-      0x45 must equal(decodedSdes.getChunks().get(0).getSsrc());
+      0x45 must equal(decodedSdes.getChunks().get(0).getSsrc);
       decodedSdes.getChunks().get(0).getItems() must not equal (null);
       SdesChunkItem.Type.CNAME must equal(decodedSdes.getChunks().get(0).getItems().get(0).getType());
       "karma" must equal(decodedSdes.getChunks().get(0).getItems().get(0).getValue());
       SdesChunkItem.Type.NAME must equal(decodedSdes.getChunks().get(0).getItems().get(1).getType());
       "Earl" must equal(decodedSdes.getChunks().get(0).getItems().get(1).getValue());
 
-      0x46 must equal(decodedSdes.getChunks().get(1).getSsrc());
+      0x46 must equal(decodedSdes.getChunks().get(1).getSsrc);
       decodedSdes.getChunks().get(1).getItems() must not equal (null);
       SdesChunkItem.Type.CNAME must equal(decodedSdes.getChunks().get(1).getItems().get(0).getType());
       "Randy" must equal(decodedSdes.getChunks().get(1).getItems().get(0).getValue());

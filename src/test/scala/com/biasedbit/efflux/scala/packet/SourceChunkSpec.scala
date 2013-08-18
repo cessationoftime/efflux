@@ -5,14 +5,6 @@ import org.scalatest.matchers.MustMatchers
 import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SdesChunk
 
 class SourceChunkSpec extends WordSpec with MustMatchers {
 
@@ -31,7 +23,7 @@ class SourceChunkSpec extends WordSpec with MustMatchers {
       System.err.println("encoded readable bytes: " + encoded.readableBytes());
       val decoded: SdesChunk = SdesChunk.decode(encoded);
 
-      chunk.getSsrc() must equal(decoded.getSsrc());
+      chunk.getSsrc must equal(decoded.getSsrc);
       decoded.getItems() must not equal (null);
       4 must equal(decoded.getItems().size());
 

@@ -5,27 +5,13 @@ import org.scalatest.matchers.MustMatchers
 import com.biasedbit.efflux.util.ByteUtils
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.buffer.ChannelBuffers
-import com.biasedbit.efflux.packet.ControlPacket
-import com.biasedbit.efflux.packet.ByePacket
-import com.biasedbit.efflux.packet.ReceiverReportPacket
-import com.biasedbit.efflux.packet.SenderReportPacket
-import com.biasedbit.efflux.packet.ReceptionReport
-import com.biasedbit.efflux.packet.SdesChunkItem
-import com.biasedbit.efflux.packet.SdesChunkItems
-import com.biasedbit.efflux.packet.SdesChunk
-import com.biasedbit.efflux.packet.RtpVersion
-import com.biasedbit.efflux.packet.SourceDescriptionPacket
-import com.biasedbit.efflux.packet.SdesChunkPrivItem
 import org.scalatest.BeforeAndAfter
-import com.biasedbit.efflux.participant.RtpParticipant
-import com.biasedbit.efflux.participant.DefaultParticipantDatabase
 import java.net.SocketAddress
 import java.net.InetSocketAddress
-import com.biasedbit.efflux.participant.ParticipantEventListener
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicBoolean
-import com.biasedbit.efflux.participant.ParticipantOperation
-import com.biasedbit.efflux.packet.DataPacket
+import com.biasedbit.efflux.scala.packet.SdesChunk
+import com.biasedbit.efflux.scala.packet.DataPacket
 
 // private classes ------------------------------------------------------------------------------------------------
 
