@@ -53,11 +53,13 @@ class SingleParticipantSession(id: String,
 
   private val receiver = remoteParticipant
 
-  @BooleanBeanProperty
   var sendToLastOrigin: Boolean = SEND_TO_LAST_ORIGIN
 
-  @BooleanBeanProperty
+  def isSendToLastOrigin = sendToLastOrigin
+
   var ignoreFromUnknownSsrc: Boolean = IGNORE_FROM_UNKNOWN_SSRC
+
+  def isIgnoreFromUnknownSsrc = ignoreFromUnknownSsrc
 
   private val receivedPackets = new AtomicBoolean(false)
 
@@ -130,7 +132,7 @@ class SingleParticipantSession(id: String,
       this.writeToData(packet, destination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception ⇒ LOG.error("Failed to send {} to {} in session with id {}.", this.id, this.receiver.getInfo)
+      case e: Exception ⇒ AbstractRtpSession.LOG.error("Failed to send {} to {} in session with id {}.", this.id, this.receiver.getInfo)
     }
   }
 
@@ -141,7 +143,7 @@ class SingleParticipantSession(id: String,
       this.writeToControl(packet, destination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception ⇒ LOG.error("Failed to send RTCP packet to {} in session with id {}.", this.receiver.getInfo,
+      case e: Exception ⇒ AbstractRtpSession.LOG.error("Failed to send RTCP packet to {} in session with id {}.", this.receiver.getInfo,
         this.id)
     }
   }
@@ -151,7 +153,7 @@ class SingleParticipantSession(id: String,
       this.writeToControl(packet, this.receiver.getControlDestination)
       this.sentOrReceivedPackets.set(true)
     } catch {
-      case e: Exception ⇒ LOG.error("Failed to send compound RTCP packet to {} in session with id {}.",
+      case e: Exception ⇒ AbstractRtpSession.LOG.error("Failed to send compound RTCP packet to {} in session with id {}.",
         this.receiver.getInfo, this.id)
     }
   }
@@ -159,9 +161,9 @@ class SingleParticipantSession(id: String,
   override def dataPacketReceived(origin: SocketAddress, packet: DataPacket) {
     if (!this.receivedPackets.getAndSet(true)) {
       this.receiver.getInfo.setSsrc(packet.getSsrc)
-      LOG.trace("First packet received from remote source, updated SSRC to {}.", packet.getSsrc)
+      AbstractRtpSession.LOG.trace("First packet received from remote source, updated SSRC to {}.", packet.getSsrc)
     } else if (this.ignoreFromUnknownSsrc && (packet.getSsrc != this.receiver.getInfo.getSsrc)) {
-      LOG.trace("Discarded packet from unexpected SSRC: {} (expected was {}).", packet.getSsrc, this.receiver.getInfo.getSsrc)
+      AbstractRtpSession.LOG.trace("Discarded packet from unexpected SSRC: {} (expected was {}).", packet.getSsrc, this.receiver.getInfo.getSsrc)
       return
     }
     super.dataPacketReceived(origin, packet)

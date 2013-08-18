@@ -1,7 +1,7 @@
 package com.biasedbit.efflux.scala.network
 
-import com.biasedbit.efflux.logging.Logger
-import com.biasedbit.efflux.packet.CompoundControlPacket
+import com.biasedbit.efflux.scala.logging.Logger
+import com.biasedbit.efflux.scala.packet.CompoundControlPacket
 import org.jboss.netty.channel.ChannelHandlerContext
 import org.jboss.netty.channel.ExceptionEvent
 import org.jboss.netty.channel.MessageEvent
@@ -9,7 +9,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler
 import java.util.concurrent.atomic.AtomicInteger
 import ControlHandler._
 import scala.collection.JavaConversions._
-import com.biasedbit.efflux.scala.packet.CompoundControlPacket
 
 object ControlHandler {
 

@@ -31,7 +31,9 @@ object RtpParticipantInfo {
 /**
  * @author <a href="http://bruno.biasedbit.com/">Bruno de Carvalho</a>
  */
-class RtpParticipantInfo(@BeanProperty var ssrc: Long) {
+class RtpParticipantInfo(var ssrc: Long) {
+
+  def getSsrc = ssrc
 
   @BeanProperty
   var name: String = _

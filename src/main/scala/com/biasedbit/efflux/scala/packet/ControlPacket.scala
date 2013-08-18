@@ -67,15 +67,15 @@ object ControlPacket {
  */
 abstract class ControlPacket protected (protected var `type`: ControlPacket.Type.Type) {
   import ControlPacket.Type
-  protected var version: RtpVersion = RtpVersion.V2
+  protected var version = RtpVersion.V2
 
   def encode(currentCompoundLength: Int, fixedBlockSize: Int): ChannelBuffer
 
   def encode(): ChannelBuffer
 
-  def getVersion(): RtpVersion = version
+  def getVersion(): RtpVersion.RtpVersion = version
 
-  def setVersion(version: RtpVersion) {
+  def setVersion(version: RtpVersion.RtpVersion) {
     if (version != RtpVersion.V2) {
       throw new IllegalArgumentException("Only V2 is supported")
     }

@@ -66,16 +66,6 @@ class Logger(name: String) {
   def trace(message: String) = this.logger.trace(message);
 
   /**
-   * Print a formatted trace message to the logs, with one parameter.
-   *
-   * @param message   Message to be logged.
-   * @param parameter Message parameter.
-   */
-  def trace(message: String, parameter: Any) {
-    this.logger.trace(message, parameter);
-  }
-
-  /**
    * Print a formatted trace message to the logs, with an arbitrary number of parameters.
    *
    * @param message    Message to be logged.
@@ -135,35 +125,14 @@ class Logger(name: String) {
   def debug(message: String) = this.logger.debug(message);
 
   /**
-   * Print a formatted debug message to the logs, with one parameter.
-   *
-   * @param message   Message to be logged.
-   * @param parameter Message parameter.
-   */
-  def debug(message: String, parameter: Any) {
-    this.logger.debug(message, parameter);
-  }
-
-  /**
    * Print a formatted debug message to the logs, with an arbitrary number of parameters.
    *
    * @param message    Message to be logged.
    * @param parameters Array of parameters.
    */
   def debug(message: String, parameters: Any*) {
-    this.logger.debug(message, parameters);
+    this.logger.debug(message, parameters.toArray.map(x ⇒ x.asInstanceOf[java.lang.Object]))
   }
-
-  /**
-   * Print a debug message with an exception.
-   *
-   * @param message   Message to be logged.
-   * @param throwable Throwable to be logged.
-   */
-  def debug(message: String, throwable: Throwable) {
-    this.logger.debug(message, throwable);
-  }
-
   /**
    * Print a formatted debug message to the logs, with an arbitrary number of parameters and an exception.
    * <p/>
@@ -200,16 +169,6 @@ class Logger(name: String) {
    */
   def info(message: String) {
     this.logger.info(message);
-  }
-
-  /**
-   * Print a formatted info message to the logs, with one parameter.
-   *
-   * @param message   Message to be logged.
-   * @param parameter Message parameter.
-   */
-  def info(message: String, parameter: Any) {
-    this.logger.info(message, parameter);
   }
 
   /**
@@ -271,16 +230,6 @@ class Logger(name: String) {
   }
 
   /**
-   * Print a formatted warning message to the logs, with one parameter.
-   *
-   * @param message   Message to be logged.
-   * @param parameter Message parameter.
-   */
-  def warn(message: String, parameter: Any) {
-    this.logger.warn(message, parameter);
-  }
-
-  /**
    * Print a formatted warning message to the logs, with an arbitrary number of parameters.
    *
    * @param message    Message to be logged.
@@ -336,16 +285,6 @@ class Logger(name: String) {
    */
   def error(message: String) {
     this.logger.error(message);
-  }
-
-  /**
-   * Print a formatted error message to the logs, with one parameter.
-   *
-   * @param message   Message to be logged.
-   * @param parameter Message parameter.
-   */
-  def error(message: String, parameter: Any) {
-    this.logger.error(message, parameter);
   }
 
   /**

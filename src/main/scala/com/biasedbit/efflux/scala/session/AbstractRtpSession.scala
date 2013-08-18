@@ -56,7 +56,7 @@ import scala.collection.JavaConversions._
 
 object AbstractRtpSession {
 
-  protected val LOG = Logger.getLogger(classOf[AbstractRtpSession])
+  protected[session] val LOG = Logger.getLogger(classOf[AbstractRtpSession])
 
   protected val VERSION = "efflux_0.4_15092010"
 
@@ -83,7 +83,7 @@ object AbstractRtpSession {
  * @author <a:mailto="bruno.carvalho@wit-software.com" />Bruno de Carvalho</a>
  */
 abstract class AbstractRtpSession(protected val id: String,
-                                  payloadTypes: Collection[Integer],
+                                  _payloadTypes: Collection[Integer],
                                   local: RtpParticipant,
                                   _timer: HashedWheelTimer,
                                   protected val executor: OrderedMemoryAwareThreadPoolExecutor) extends RtpSession with TimerTask {
@@ -92,7 +92,7 @@ abstract class AbstractRtpSession(protected val id: String,
 
   protected var host: String = _
 
-  protected var useNio: Boolean = USE_NIO
+  protected var useNioFlag: Boolean = USE_NIO
 
   protected var discardOutOfOrder: Boolean = DISCARD_OUT_OF_ORDER
 
@@ -142,7 +142,7 @@ abstract class AbstractRtpSession(protected val id: String,
 
   protected var periodicRtcpSendInterval: Int = _
 
-  for (payloadType ← payloadTypes if (payloadType < 0) || (payloadType > 127)) {
+  for (payloadType ← _payloadTypes if (payloadType < 0) || (payloadType > 127)) {
     throw new IllegalArgumentException("PayloadTypes must be in range [0;127]")
   }
 
@@ -150,7 +150,7 @@ abstract class AbstractRtpSession(protected val id: String,
     throw new IllegalArgumentException("Local participant must have its data & control addresses set")
   }
 
-  this.payloadTypes.addAll(payloadTypes)
+  this.payloadTypes.addAll(_payloadTypes)
 
   protected val (timer: HashedWheelTimer, internalTimer: Boolean) =
     if (_timer == null) (new HashedWheelTimer(1, TimeUnit.SECONDS), true) else (_timer, false)
@@ -407,6 +407,7 @@ abstract class AbstractRtpSession(protected val id: String,
       }
       return
     }
+    import ControlPacket.Type._
     for (controlPacket ← packet.getControlPackets) controlPacket.getType match {
       case SENDER_REPORT | RECEIVER_REPORT ⇒ this.handleReportPacket(origin, controlPacket.asInstanceOf[AbstractReportPacket])
       case SOURCE_DESCRIPTION              ⇒ this.handleSdesPacket(origin, controlPacket.asInstanceOf[SourceDescriptionPacket])
@@ -706,7 +707,10 @@ abstract class AbstractRtpSession(protected val id: String,
     this.sentPacketCounter.incrementAndGet()
   }
 
-  protected def updatePeriodicRtcpSendInterval(): Long = (this.periodicRtcpSendInterval = 5)
+  protected def updatePeriodicRtcpSendInterval(): Long = {
+    this.periodicRtcpSendInterval = 5
+    periodicRtcpSendInterval
+  }
 
   def isRunning(): Boolean = this.running.get
 
@@ -719,13 +723,13 @@ abstract class AbstractRtpSession(protected val id: String,
     this.host = host
   }
 
-  def useNio(): Boolean = useNio
+  def useNio(): Boolean = useNioFlag
 
   def setUseNio(useNio: Boolean) {
     if (this.running.get) {
       throw new IllegalArgumentException("Cannot modify property after initialisation")
     }
-    this.useNio = useNio
+    this.useNioFlag = useNio
   }
 
   def isDiscardOutOfOrder(): Boolean = discardOutOfOrder

@@ -20,11 +20,11 @@ import scala.collection.JavaConversions._
 
 object DefaultParticipantDatabase {
 
-  private val LOG = Logger.getLogger(classOf[DefaultParticipantDatabase])
+  private[DefaultParticipantDatabase] val LOG = Logger.getLogger(classOf[DefaultParticipantDatabase])
 
-  private val TIMEOUT_AFTER_NO_PACKETS_RECEIVED = 60
+  private[DefaultParticipantDatabase] val TIMEOUT_AFTER_NO_PACKETS_RECEIVED = 60
 
-  private val TIMEOUT_AFTER_BYE_AND_NO_PACKETS_RECEIVED = 5
+  private[DefaultParticipantDatabase] val TIMEOUT_AFTER_BYE_AND_NO_PACKETS_RECEIVED = 5
 }
 
 /**
